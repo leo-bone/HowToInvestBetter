@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>高性价比投资指南 · 在线检索页</title>
+<meta name="description" content="模仿《高性价比人生指南》的循证投资手册：每条写明花掉什么、换回什么、证据多硬，只引论文与官方文件。可按关键词、章节、证据等级、成本维度筛选。">
+<style>
+  :root{
+    --ink:#1f2933; --sub:#52606d; --line:#e4e7eb; --bg:#fbfbfa;
+    --card:#fff; --a:#0b7285; --b:#9c6f19; --c:#64748b; --zero:#2f9e44;
+    --warn:#c92a2a; --warnbg:#fff5f5;
+    --tagA:#e3fafc; --tagB:#fff4e6; --tagC:#f1f5f9;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.7;font-size:15px;}
+  .wrap{max-width:980px;margin:0 auto;padding:26px 20px 100px;}
+  h1{font-size:26px;margin:0 0 4px;}
+  .lede{color:var(--sub);font-size:14px;margin:0 0 8px;}
+  .badges{font-size:12px;color:var(--sub);margin:6px 0 14px;}
+  .badges span{display:inline-block;background:#fff;border:1px solid var(--line);
+    border-radius:20px;padding:2px 10px;margin:0 6px 6px 0;}
+  .toolbar{position:sticky;top:0;background:rgba(251,251,250,.97);backdrop-filter:blur(6px);
+    border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:14px 0 8px;z-index:5;
+    display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .toolbar input[type=text]{padding:8px 11px;border:1px solid var(--line);border-radius:7px;font-size:14px;min-width:190px;flex:1;}
+  .group{display:flex;gap:4px;flex-wrap:wrap;align-items:center;}
+  .group .gl{font-size:11px;color:var(--sub);margin-right:2px;}
+  .btn{border:1px solid var(--line);background:#fff;border-radius:7px;padding:6px 10px;font-size:13px;cursor:pointer;color:var(--sub);}
+  .btn.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .btn.zero.on{background:var(--zero);border-color:var(--zero);}
+  select{padding:7px 9px;border:1px solid var(--line);border-radius:7px;font-size:13px;background:#fff;color:var(--sub);}
+  .stat{font-size:12.5px;color:var(--sub);margin:6px 0 14px;}
+  .ch-head{font-size:19px;margin:30px 0 6px;padding-top:14px;border-top:2px solid var(--line);}
+  .ch-sub{font-size:13px;color:var(--sub);margin:0 0 8px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:13px 16px;margin:11px 0;
+    box-shadow:0 1px 2px rgba(15,23,42,.03);scroll-margin-top:120px;}
+  .card.flash{outline:3px solid var(--zero);outline-offset:2px;}
+  .head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:6px;}
+  .id{color:var(--sub);font-weight:700;font-size:13px;}
+  .card h3{font-size:16px;margin:0;flex:1;min-width:200px;}
+  .tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;}
+  .tA{background:var(--tagA);color:var(--a);} .tB{background:var(--tagB);color:var(--b);} .tC{background:var(--tagC);color:var(--c);}
+  .imp{background:#f8fafc;color:#475569;font-size:11px;padding:2px 8px;border-radius:20px;border:1px solid var(--line);}
+  .cz{background:#ebfbee;color:var(--zero);font-size:11px;padding:2px 8px;border-radius:20px;border:1px solid #b2f2bb;font-weight:700;}
+  .cost{font-size:11px;color:#475569;background:#f8fafc;border:1px solid var(--line);padding:2px 7px;border-radius:20px;}
+  .cost.no{color:var(--zero);border-color:#b2f2bb;background:#ebfbee;}
+  .row{display:grid;grid-template-columns:54px 1fr;gap:6px;margin:4px 0;font-size:13.5px;}
+  .row .k{color:var(--sub);font-weight:600;}
+  .plain{background:#f8fafc;border-radius:8px;padding:8px 12px;margin-top:7px;font-size:13.5px;color:#334155;}
+  .plain b{color:var(--ink);}
+  .note{background:var(--warnbg);border:1px solid #ffc9c9;border-radius:8px;padding:7px 11px;margin-top:7px;font-size:13px;color:#a61e4d;}
+  .neglist{columns:2;column-gap:26px;font-size:14px;margin:0;padding-left:20px;}
+  .neglist li{margin:6px 0;break-inside:avoid;}
+  a.ref{color:var(--a);cursor:pointer;text-decoration:underline dotted;}
+  .foot{margin-top:46px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-size:12px;}
+  .empty{color:var(--sub);text-align:center;padding:40px 0;font-size:14px;}
+  .togglehint{font-size:12px;color:var(--sub);margin-top:4px;}
+  .copy{font-size:11px;color:var(--a);cursor:pointer;margin-left:6px;user-select:none;border:1px solid var(--line);
+    border-radius:20px;padding:1px 8px;}
+  .copy:hover{background:#e3fafc;}
+  .toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:var(--ink);color:#fff;
+    padding:8px 16px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:20;}
+  .toast.show{opacity:.95;}
+  .helpbar{font-size:12.5px;color:var(--sub);margin:2px 0 6px;}
+  @media(max-width:640px){.neglist{columns:1;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>高性价比投资指南 <span style="font-size:14px;color:var(--sub)">· 在线检索页</span></h1>
+  <p class="lede">模仿《高性价比人生指南》的循证投资手册：每条写明<b>花掉什么、换回什么、证据多硬</b>，只引期刊论文与官方文件。先读第九条的“三零”原则，再按条件挑。</p>
+  <div class="badges" id="badges"></div>
+
+  <div class="toolbar">
+    <input type="text" id="q" placeholder="搜索：费率、杠杆、庞氏、指数、黄金…">
+    <div class="group"><span class="gl">证据</span>
+      <button class="btn ev on" data-ev="all">全部</button>
+      <button class="btn ev" data-ev="A">A</button>
+      <button class="btn ev" data-ev="B">B</button>
+      <button class="btn ev" data-ev="C">C</button>
+    </div>
+    <div class="group"><span class="gl">成本</span>
+      <select id="fM"><option value="all">花费·全部</option><option value="无">花费·无</option><option value="有">花费·有</option></select>
+      <select id="fT"><option value="all">时间·全部</option><option value="无">时间·无</option><option value="有">时间·有</option></select>
+      <select id="fW"><option value="all">毅力·全部</option><option value="无">毅力·无</option><option value="有">毅力·有</option></select>
+    </div>
+    <button class="btn zero" id="zeroBtn">仅三零·极高性价比</button>
+    <button class="btn" id="randBtn">随机一条</button>
+    <select id="sec"><option value="all">全部章节</option></select>
+  </div>
+  <div class="togglehint">“三零”＝花费／时间／毅力三项成本全为“无”，闭眼先做的极高性价比动作。成本维度筛“无”＝该维度零成本。</div>
+  <div class="stat" id="stat"></div>
+
+  <div id="out"></div>
+
+  <div class="foot" id="foot"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script>
+(function(){
+  var D = window.BOOK_DATA || {chapters:[],entries:[],lists:[]};
+  var byId={}; D.entries.forEach(function(e){byId[e.chapter+'-'+e.num]=e;});
+  var ev='all', zero=false;
+  var fM='all', fT='all', fW='all', sec='all';
+  var q='';
+
+  // 章节下拉
+  var secSel=document.getElementById('sec');
+  D.chapters.forEach(function(c){
+    var o=document.createElement('option');
+    o.value=c.num; o.textContent='第'+c.num+'章·'+c.title.replace(/^[^、]+、/,'');
+    secSel.appendChild(o);
+  });
+
+  // 徽章
+  var g={A:0,B:0,C:0}; var tz=0;
+  D.entries.forEach(function(e){g[e.grade]=(g[e.grade]||0)+1; if(e.three_zero)tz++;});
+  document.getElementById('badges').innerHTML =
+    '<span>'+D.entries.length+' 条条目</span>'+
+    '<span>'+D.chapters.length+' 章</span>'+
+    '<span>A级 '+g.A+'</span><span>B级 '+g.B+'</span><span>C级 '+g.C+'</span>'+
+    '<span>三零 '+tz+'</span>'+
+    '<span>更新 '+D.updated+'</span>'+
+    '<span>许可 CC BY 4.0</span>';
+
+  function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function linkify(s){
+    return esc(s).replace(/第(\d+)章第(\d+)条/g,
+      '<a class="ref" data-c="$1" data-n="$2">第$1章第$2条</a>');
+  }
+  function costTag(label,val){
+    var cls = val==='无' ? 'cost no' : 'cost';
+    return '<span class="'+cls+'">'+label+'·'+val+'</span>';
+  }
+
+  function pass(e){
+    if(ev!=='all' && e.grade!==ev) return false;
+    if(zero && !e.three_zero) return false;
+    if(fM!=='all' && (fM==='无'? e.cost_money!=='无' : e.cost_money==='无')) return false;
+    if(fT!=='all' && (fT==='无'? e.cost_time!=='无'  : e.cost_time==='无'))  return false;
+    if(fW!=='all' && (fW==='无'? e.cost_will!=='无' : e.cost_will==='无')) return false;
+    if(sec!=='all' && String(e.chapter)!==String(sec)) return false;
+    if(q){
+      var hay=(e.title+e.spend+e.gain+e.source+e.plain).toLowerCase();
+      if(hay.indexOf(q)<0) return false;
+    }
+    return true;
+  }
+
+  function card(e){
+    var tags='<span class="tag t'+e.grade+'">'+e.grade+'</span>'+
+      '<span class="imp">影响：'+esc(e.impact)+'</span>'+
+      costTag('花费',e.cost_money)+costTag('时间',e.cost_time)+costTag('毅力',e.cost_will);
+    if(e.three_zero) tags+='<span class="cz">三零</span>';
+    var notes = (e.notes||[]).map(function(n){
+      return '<div class="note"><b>〔'+esc(n.type)+'〕</b> '+linkify(n.text)+'</div>';
+    }).join('');
+    return '<div class="card" id="e-'+e.chapter+'-'+e.num+'">'+
+      '<div class="head"><span class="id">第 '+e.chapter+' 章第 '+e.num+' 条</span>'+
+        '<h3>'+esc(e.title)+'</h3>'+tags+'</div>'+
+      '<div class="row"><span class="k">花掉</span><span>'+linkify(e.spend)+'</span></div>'+
+      '<div class="row"><span class="k">换回</span><span>'+linkify(e.gain)+'</span></div>'+
+      '<div class="row"><span class="k">出处</span><span>'+esc(e.source)+'</span></div>'+
+      '<div class="plain"><b>说人话：</b>'+linkify(e.plain)+'</div>'+
+      notes+'<span class="copy" data-c="'+e.chapter+'" data-n="'+e.num+'">📋 复制引用</span></div>';
+  }
+
+  function render(){
+    var out=document.getElementById('out');
+    var html=''; var shown=0;
+    D.chapters.forEach(function(c){
+      if(sec!=='all' && String(c.num)!==String(sec)) return;
+      if(c.type==='list'){
+        var lst=D.lists.filter(function(l){return l.chapter===c.num;})[0];
+        if(!lst) return;
+        var items=lst.items.filter(function(it){
+          if(q){return it.toLowerCase().indexOf(q)>=0;} return true;
+        });
+        if(!items.length) return;
+        shown+=items.length;
+        html+='<h2 class="ch-head">第 '+c.num+' 章 · '+esc(c.title.replace(/^[^、]+、/,''))+'</h2>'+
+          '<p class="ch-sub">直接不做的动作（性价比为负），出现一个划掉一个。</p>'+
+          '<ul class="neglist">'+items.map(function(it){return '<li>❌ '+esc(it)+'</li>';}).join('')+'</ul>';
+        return;
+      }
+      var es=D.entries.filter(function(e){return e.chapter===c.num;});
+      var vis=es.filter(pass);
+      if(!vis.length) return;
+      shown+=vis.length;
+      html+='<h2 class="ch-head">第 '+c.num+' 章 · '+esc(c.title.replace(/^[^、]+、/,''))+'</h2>'+
+        '<p class="ch-sub">本章 '+es.length+' 条，显示 '+vis.length+' 条。</p>'+
+        vis.map(card).join('');
+    });
+    if(!shown) html='<div class="empty">没有匹配条目，试着放宽筛选条件。</div>';
+    out.innerHTML=html;
+    document.getElementById('stat').textContent=
+      '显示 '+shown+' / '+D.entries.length+' 条 ｜ 当前筛选：'+
+      (ev==='all'?'证据全部':('证据'+ev))+
+      (zero?' ＋三零':'')+
+      (fM!=='all'?' ＋花费'+fM:'')+(fT!=='all'?' ＋时间'+fT:'')+(fW!=='all'?' ＋毅力'+fW:'')+
+      (sec!=='all'?' ＋第'+sec+'章':'');
+  }
+
+  // 事件
+  document.getElementById('q').addEventListener('input',function(){q=this.value.trim().toLowerCase();render();});
+  document.querySelectorAll('.btn.ev').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.btn.ev').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on'); ev=b.dataset.ev; render();
+    });
+  });
+  document.getElementById('zeroBtn').addEventListener('click',function(){
+    zero=!zero; this.classList.toggle('on',zero); render();
+  });
+  document.getElementById('fM').addEventListener('change',function(){fM=this.value;render();});
+  document.getElementById('fT').addEventListener('change',function(){fT=this.value;render();});
+  document.getElementById('fW').addEventListener('change',function(){fW=this.value;render();});
+  secSel.addEventListener('change',function(){sec=this.value;render();});
+
+  // 随机一条
+  document.getElementById('randBtn').addEventListener('click',function(){
+    if(!D.entries.length) return;
+    q=''; document.getElementById('q').value='';
+    ev='all'; zero=false; sec='all'; fM='all'; fT='all'; fW='all';
+    document.querySelectorAll('.btn.ev').forEach(function(x){x.classList.remove('on');});
+    document.querySelector('.btn.ev[data-ev="all"]').classList.add('on');
+    document.getElementById('zeroBtn').classList.remove('on');
+    document.getElementById('fM').value='all';
+    document.getElementById('fT').value='all';
+    document.getElementById('fW').value='all';
+    document.getElementById('sec').value='all';
+    render();
+    var e=D.entries[Math.floor(Math.random()*D.entries.length)];
+    var el=document.getElementById('e-'+e.chapter+'-'+e.num);
+    if(el){el.scrollIntoView({behavior:'smooth',block:'center'});
+      el.classList.add('flash'); setTimeout(function(){el.classList.remove('flash');},1600);}
+  });
+
+  // 复制引用
+  function toast(msg){
+    var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+    setTimeout(function(){t.classList.remove('show');},1400);
+  }
+  document.getElementById('out').addEventListener('click',function(ev3){
+    var a=ev3.target.closest&&ev3.target.closest('.copy');
+    if(!a) return;
+    var e=byId[a.dataset.c+'-'+a.dataset.n]; if(!e) return;
+    var txt='《高性价比投资指南》第'+e.chapter+'章第'+e.num+'条「'+e.title+'」\n'+
+      '花掉：'+e.spend+'\n换回：'+e.gain+'\n证据：'+e.grade+'｜出处：'+e.source;
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(function(){toast('已复制引用 ✓');},
+        function(){toast('复制失败，请手动选择');});
+    } else { toast('当前环境不支持自动复制'); }
+  });
+
+  // 交叉引用跳转
+  document.getElementById('out').addEventListener('click',function(ev2){
+    var a=ev2.target.closest&&ev2.target.closest('a.ref');
+    if(!a) return;
+    var id='e-'+a.dataset.c+'-'+a.dataset.n;
+    var el=document.getElementById(id);
+    if(el){el.scrollIntoView({behavior:'smooth',block:'center'});
+      el.classList.add('flash'); setTimeout(function(){el.classList.remove('flash');},1600);}
+  });
+
+  document.getElementById('foot').innerHTML=
+    '本《高性价比投资指南》为方法论手册，非投资建议，不构成对任何金融产品或策略的推荐。市场有风险，决策需独立判断并咨询持牌专业人士。'+
+    '所有引用以各机构最新官方发布为准。本指南模仿《高性价比人生指南》(eternity4719/HowToLiveBetter) 的“成本-收益-证据等级”框架创作，向其致敬。';
+
+  render();
+})();
+</script>
+</body>
+</html>
