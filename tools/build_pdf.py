@@ -6,15 +6,13 @@ HowToInvestBetter —— PDF 生成器（依赖 reportlab + 内置 CJK 字体）
 解析 book/ 生成排版干净的 PDF 电子书：HowToInvestBetter.pdf
   - 封面
   - 目录（按章）
-  - 每章：章标题 + 条目（标题/标签/花掉·换回·出处·说人话）
+  - 每章：章标题 + 章前导语 + 条目（标题/标签/成本·说人话·收益·证据等级·来源·备注）
   - 页脚页码
 
 中文字体使用 reportlab 内置的 Adobe CID 字体 STSong-Light（无需额外字体文件）。
 
 用法：
   python3 tools/build_pdf.py
-依赖安装（仅构建时用，不影响读者）：
-  pip install reportlab
 """
 import os
 import re
@@ -27,7 +25,7 @@ OUT = os.path.join(ROOT, "HowToInvestBetter.pdf")
 
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
-from reportlab.lib.colors import HexColor, black, white
+from reportlab.lib.colors import HexColor
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_LEFT
 from reportlab.pdfbase import pdfmetrics
@@ -43,18 +41,20 @@ TITLE = "高性价比投资指南"
 SUB = "花掉什么，换回什么，证据有多硬"
 
 HEAD_RE = re.compile(r"^#\s+(.+?)\s*$")
-ENTRY_RE = re.compile(
-    r"^##\s+(\d+)\s+(.+?)\s*"
-    r"〔([ABC])〕〔影响：([^〕]+)〕〔花费：([^〕]+)〕〔时间：([^〕]+)〕〔毅力：([^〕]+)〕\s*$"
-)
-FIELD_RE = re.compile(r"^\*\*(花掉|换回|出处|说人话)\*\*[：:]\s*(.*)$")
-NOTE_RE = re.compile(r"^>\s*〔([^〕]+)〕\s*(.*)$")
-
-GRADE_LABEL = {"A": "A·权威统计/顶刊/官方", "B": "B·单项研究/机构报告", "C": "C·合理推论/广泛共识"}
+ENTRY_RE = re.compile(r"^###\s+(\d+)\.\s+(.+?)\s*$")
+TAG_RE = re.compile(r"^<!--\s*标签:\s*(.+?)\s*-->$")
+FIELD_RE = re.compile(r"^-\s*(成本|说人话|收益|证据等级|来源|备注)[：:]\s*(.*)$")
+FIELDS = ["成本", "说人话", "收益", "证据等级", "来源", "备注"]
 
 
 def esc(s):
     return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def tagline(tags):
+    return "钱：%s ｜ 时间：%s ｜ 毅力：%s ｜ 收益：%s ｜ 口径：%s" % (
+        esc(tags.get("钱", "")), esc(tags.get("时间", "")), esc(tags.get("毅力", "")),
+        esc(tags.get("收益", "")), esc(tags.get("口径", "")))
 
 
 def parse_chapters():
@@ -63,65 +63,63 @@ def parse_chapters():
     for path in files:
         num = int(os.path.basename(path).split("-", 1)[0])
         title = None
+        intro = []
         entries = []
         items = []
         cur = None
         for line in open(path, encoding="utf-8").read().split("\n"):
             m = HEAD_RE.match(line)
-            if m and title is None:
+            if m and title is None and not line.startswith("##"):
                 title = m.group(1).strip()
                 continue
             m = ENTRY_RE.match(line)
             if m:
                 if cur:
                     entries.append(cur)
-                cur = {
-                    "num": int(m.group(1)),
-                    "title": m.group(2).strip(),
-                    "grade": m.group(3),
-                    "impact": m.group(4).strip(),
-                    "cm": m.group(5).strip(),
-                    "ct": m.group(6).strip(),
-                    "cw": m.group(7).strip(),
-                    "fields": {},
-                    "notes": [],
-                }
+                cur = {"num": int(m.group(1)), "title": m.group(2).strip(),
+                       "tags": {}, "fields": {}}
+                continue
+            tm = TAG_RE.match(line)
+            if tm and cur is not None:
+                for part in re.split(r"\s+", tm.group(1).strip()):
+                    if "=" in part:
+                        k, v = part.split("=", 1)
+                        cur["tags"][k.strip()] = v.strip()
                 continue
             if cur is not None:
                 fm = FIELD_RE.match(line)
                 if fm:
                     cur["fields"][fm.group(1)] = fm.group(2).strip()
                     continue
-                nm = NOTE_RE.match(line)
-                if nm:
-                    cur["notes"].append((nm.group(1).strip(), nm.group(2).strip()))
-                    continue
                 if line.strip() == "":
                     continue
             else:
-                # 清单型章节：条目之前的纯列表项
+                if line.strip() == "":
+                    continue
                 bm = re.match(r"^[-*]\s+(.+?)\s*$", line)
-                if bm and title is not None:
+                if bm:
                     items.append(bm.group(1).strip())
+                elif title is not None:
+                    intro.append(line.strip())
         if cur:
             entries.append(cur)
         if entries or items:
-            out.append((num, title or "未命名", entries, items))
+            out.append((num, title or "未命名", intro, entries, items))
     return out
 
 
-# 样式
 H1 = ParagraphStyle("H1", fontName=FONT, fontSize=17, leading=22, spaceAfter=8,
                     textColor=HexColor("#c0392b"))
 H2 = ParagraphStyle("H2", fontName=FONT, fontSize=11.5, leading=15, spaceBefore=8,
                     spaceAfter=3, textColor=HexColor("#1a1a1a"))
-META = ParagraphStyle("META", fontName=FONT, fontSize=8, leading=11,
-                      textColor=HexColor("#777777"), spaceAfter=4)
+META = ParagraphStyle("META", fontName=FONT, fontSize=7.8, leading=11,
+                      textColor=HexColor("#888888"), spaceAfter=4)
+INTRO = ParagraphStyle("INTRO", fontName=FONT, fontSize=9.3, leading=14,
+                       textColor=HexColor("#444444"), spaceAfter=4)
 BODY = ParagraphStyle("BODY", fontName=FONT, fontSize=9.5, leading=14,
                       spaceAfter=2, alignment=TA_LEFT)
-NOTE = ParagraphStyle("NOTE", fontName=FONT, fontSize=8.5, leading=12,
-                      textColor=HexColor("#b8860b"), spaceAfter=2)
-LABEL_RED = HexColor("#c0392b")
+NOTE = ParagraphStyle("NOTE", fontName=FONT, fontSize=8.8, leading=12.5,
+                      textColor=HexColor("#8a6d1b"), spaceAfter=2)
 COVER_T = ParagraphStyle("COVER_T", fontName=FONT, fontSize=26, leading=32,
                          alignment=TA_CENTER, textColor=HexColor("#c0392b"))
 COVER_S = ParagraphStyle("COVER_S", fontName=FONT, fontSize=13, leading=20,
@@ -141,7 +139,7 @@ def on_page(canvas, doc):
 
 def build():
     chapters = parse_chapters()
-    total_entries = sum(len(c[2]) for c in chapters)
+    total_entries = sum(len(c[3]) for c in chapters)
     today = datetime.date.today().isoformat()
 
     doc = SimpleDocTemplate(
@@ -153,39 +151,35 @@ def build():
     )
     story = []
 
-    # 封面
     story.append(Spacer(1, 55 * mm))
     story.append(Paragraph(esc(TITLE), COVER_T))
     story.append(Spacer(1, 6 * mm))
     story.append(Paragraph(esc(SUB), COVER_S))
     story.append(Spacer(1, 10 * mm))
-    story.append(Paragraph("仿《高性价比人生指南》体例 · 开源 · CC BY 4.0", COVER_F))
+    story.append(Paragraph("开源 · CC BY 4.0", COVER_F))
     story.append(Paragraph("更新于 %s · 共 %d 章 %d 条" % (today, len(chapters), total_entries), COVER_F))
     story.append(PageBreak())
 
-    # 目录
     story.append(Paragraph("目录", H1))
     story.append(HRFlowable(width="100%", color=HexColor("#c0392b"), thickness=1, spaceAfter=8))
-    for num, title, entries, items in chapters:
+    for num, title, intro, entries, items in chapters:
         cnt = "%d 条" % len(entries) if entries else "%d 项清单" % len(items)
         story.append(Paragraph("第%d章　%s　<span color='#999999'>（%s）</span>" % (num, esc(title), cnt), BODY))
     story.append(PageBreak())
 
-    # 正文
-    for num, title, entries, items in chapters:
+    for num, title, intro, entries, items in chapters:
         story.append(Paragraph("第%d章　%s" % (num, esc(title)), H1))
         story.append(HRFlowable(width="100%", color=HexColor("#e0e0e0"), thickness=0.6, spaceAfter=6))
+        for para in intro:
+            story.append(Paragraph(esc(para), INTRO))
         for e in entries:
             block = []
             block.append(Paragraph("%d. %s" % (e["num"], esc(e["title"])), H2))
-            block.append(Paragraph(
-                "<font color='#888888'>[%s] 影响：%s ｜ 花费：%s 时间：%s 毅力：%s</font>" % (
-                    GRADE_LABEL[e["grade"]], esc(e["impact"]), esc(e["cm"]), esc(e["ct"]), esc(e["cw"])), META))
-            for k in ("花掉", "换回", "出处", "说人话"):
-                if e["fields"].get(k):
-                    block.append(Paragraph("<font color='#c0392b'>%s：</font>%s" % (k, esc(e["fields"][k])), BODY))
-            for typ, txt in e["notes"]:
-                block.append(Paragraph("<font color='#b8860b'>〔%s〕 %s</font>" % (esc(typ), esc(txt)), NOTE))
+            block.append(Paragraph("<font color='#888888'>%s</font>" % tagline(e["tags"]), META))
+            for k in FIELDS:
+                v = e["fields"].get(k)
+                if v:
+                    block.append(Paragraph("<font color='#c0392b'>%s：</font>%s" % (k, esc(v)), BODY))
             story.append(KeepTogether(block))
             story.append(Spacer(1, 3))
         if items:

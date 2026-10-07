@@ -3,10 +3,8 @@
 """
 HowToInvestBetter —— EPUB 生成器（仅依赖 Python 标准库）
 
-解析 book/ 下的章节 Markdown，生成一份排版干净的 EPUB 电子书：
+解析 book/ 下的章节 Markdown（原书格式），生成一份排版干净的 EPUB 电子书：
   HowToInvestBetter.epub
-
-EPUB = zip(mimetype + META-INF/container.xml + OEBPS/*.xhtml + content.opf + toc.ncx)
 
 用法：
   python3 tools/build_epub.py
@@ -23,16 +21,14 @@ BOOK = os.path.join(ROOT, "book")
 OUT = os.path.join(ROOT, "HowToInvestBetter.epub")
 
 HEAD_RE = re.compile(r"^#\s+(.+?)\s*$")
-ENTRY_RE = re.compile(
-    r"^##\s+(\d+)\s+(.+?)\s*"
-    r"〔([ABC])〕〔影响：([^〕]+)〕〔花费：([^〕]+)〕〔时间：([^〕]+)〕〔毅力：([^〕]+)〕\s*$"
-)
-FIELD_RE = re.compile(r"^\*\*(花掉|换回|出处|说人话)\*\*[：:]\s*(.*)$")
-NOTE_RE = re.compile(r"^>\s*〔([^〕]+)〕\s*(.*)$")
+ENTRY_RE = re.compile(r"^###\s+(\d+)\.\s+(.+?)\s*$")
+TAG_RE = re.compile(r"^<!--\s*标签:\s*(.+?)\s*-->$")
+FIELD_RE = re.compile(r"^-\s*(成本|说人话|收益|证据等级|来源|备注)[：:]\s*(.*)$")
 BULLET_RE = re.compile(r"^[-*]\s+(.+?)\s*$")
+FIELDS = ["成本", "说人话", "收益", "证据等级", "来源", "备注"]
 
 TITLE = "高性价比投资指南"
-AUTHOR = "HowToInvestBetter 项目（仿《高性价比人生指南》体例）"
+AUTHOR = "HowToInvestBetter 项目"
 UID = "howtoinvestbetter-2026"
 
 
@@ -43,50 +39,47 @@ def parse_book():
         num = int(os.path.basename(path).split("-", 1)[0])
         lines = open(path, encoding="utf-8").read().split("\n")
         title = None
+        intro = []
         entries = []
         items = []
         cur = None
         for line in lines:
             m = HEAD_RE.match(line)
-            if m and title is None:
+            if m and title is None and not line.startswith("##"):
                 title = m.group(1).strip()
                 continue
             m = ENTRY_RE.match(line)
             if m:
                 if cur:
                     entries.append(cur)
-                cur = {
-                    "num": int(m.group(1)),
-                    "title": m.group(2).strip(),
-                    "grade": m.group(3),
-                    "impact": m.group(4).strip(),
-                    "cost_money": m.group(5).strip(),
-                    "cost_time": m.group(6).strip(),
-                    "cost_will": m.group(7).strip(),
-                    "fields": {},
-                    "notes": [],
-                }
+                cur = {"num": int(m.group(1)), "title": m.group(2).strip(),
+                       "tags": {}, "fields": {}}
+                continue
+            tm = TAG_RE.match(line)
+            if tm and cur is not None:
+                for part in re.split(r"\s+", tm.group(1).strip()):
+                    if "=" in part:
+                        k, v = part.split("=", 1)
+                        cur["tags"][k.strip()] = v.strip()
                 continue
             if cur is not None:
                 fm = FIELD_RE.match(line)
                 if fm:
                     cur["fields"][fm.group(1)] = fm.group(2).strip()
                     continue
-                nm = NOTE_RE.match(line)
-                if nm:
-                    cur["notes"].append((nm.group(1).strip(), nm.group(2).strip()))
-                    continue
-                if BULLET_RE.match(line):
-                    continue
                 if line.strip() == "":
                     continue
             else:
+                if line.strip() == "":
+                    continue
                 bm = BULLET_RE.match(line)
-                if bm and title is not None:
+                if bm:
                     items.append(bm.group(1).strip())
+                elif title is not None:
+                    intro.append(line.strip())
         if cur:
             entries.append(cur)
-        chapters.append((num, title or "未命名", entries, items))
+        chapters.append((num, title or "未命名", intro, entries, items))
     return chapters
 
 
@@ -94,26 +87,28 @@ def esc(s):
     return _html.escape(s or "", quote=True)
 
 
-GRADE_LABEL = {"A": "证据 A · 权威统计/顶刊/官方文件", "B": "证据 B · 单项研究/机构报告", "C": "证据 C · 合理推论/广泛共识"}
+def tagline(tags):
+    return "钱：%s ｜ 时间：%s ｜ 毅力：%s ｜ 收益：%s ｜ 口径：%s" % (
+        esc(tags.get("钱", "")), esc(tags.get("时间", "")), esc(tags.get("毅力", "")),
+        esc(tags.get("收益", "")), esc(tags.get("口径", "")))
 
 
-def chapter_xhtml(num, title, entries, items):
+def chapter_xhtml(num, title, intro, entries, items):
     parts = ['<?xml version="1.0" encoding="utf-8"?>']
     parts.append('<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">')
     parts.append("<head><title>%s</title></head><body>" % esc(title))
     parts.append('<h1 class="ch">%s</h1>' % esc(title))
+    for para in intro:
+        parts.append('<p class="intro">%s</p>' % esc(para))
     if entries:
         for e in entries:
             parts.append('<div class="entry">')
-            parts.append('<h2>%d. %s</h2>' % (e["num"], esc(e["title"])))
-            parts.append('<p class="meta">%s ｜ 影响：%s ｜ 花费：%s 时间：%s 毅力：%s</p>' % (
-                esc(GRADE_LABEL[e["grade"]]), esc(e["impact"]),
-                esc(e["cost_money"]), esc(e["cost_time"]), esc(e["cost_will"])))
-            for k in ("花掉", "换回", "出处", "说人话"):
-                if e["fields"].get(k):
-                    parts.append('<p><b>%s：</b>%s</p>' % (k, esc(e["fields"][k])))
-            for typ, txt in e["notes"]:
-                parts.append('<p class="note">〔%s〕 %s</p>' % (esc(typ), esc(txt)))
+            parts.append('<h3>%d. %s</h3>' % (e["num"], esc(e["title"])))
+            parts.append('<p class="meta">%s</p>' % tagline(e["tags"]))
+            for k in FIELDS:
+                v = e["fields"].get(k)
+                if v:
+                    parts.append('<p><b>%s：</b>%s</p>' % (k, esc(v)))
             parts.append('</div>')
     else:
         parts.append('<ul class="revlist">')
@@ -125,13 +120,13 @@ def chapter_xhtml(num, title, entries, items):
 
 
 CSS = """
-body{font-family:"Noto Serif CJK SC","Songti SC",serif;line-height:1.8;margin:1.2em;color:#1a1a1a;}
+body{font-family:"Noto Serif CJK SC","Songti SC",serif;line-height:1.85;margin:1.2em;color:#1a1a1a;}
 h1.ch{font-size:1.5em;border-bottom:2px solid #c0392b;padding-bottom:.3em;margin-bottom:.6em;}
-.entry{border-left:3px solid #e0e0e0;padding-left:.8em;margin:1em 0;}
-.entry h2{font-size:1.15em;margin:.4em 0;color:#222;}
-.meta{font-size:.8em;color:#777;margin:.2em 0 .6em;}
-.meta,.note{font-size:.82em;}
-.note{color:#b8860b;font-style:italic;}
+.intro{color:#444;font-size:.95em;}
+.entry{border-left:3px solid #e0e0e0;padding-left:.9em;margin:1.1em 0;}
+.entry h3{font-size:1.12em;margin:.5em 0 .2em;color:#111;}
+.meta{font-size:.78em;color:#888;margin:.1em 0 .5em;}
+.note{color:#b8860b;}
 b{color:#c0392b;}
 .revlist li{margin:.4em 0;}
 """
@@ -142,37 +137,32 @@ COVER = """<?xml version="1.0" encoding="utf-8"?>
 <body style="text-align:center;padding-top:4em;">
 <h1 style="font-size:2em;color:#c0392b;">%s</h1>
 <p style="font-size:1.1em;">花掉什么，换回什么，证据有多硬</p>
-<p style="color:#777;">仿《高性价比人生指南》体例 · 开源 · CC BY 4.0</p>
+<p style="color:#777;">开源 · CC BY 4.0</p>
 </body></html>""" % (esc(TITLE), esc(TITLE))
 
 
 def build():
     chapters = parse_book()
-    # 只保留有正文（条目或清单）的章
-    chapters = [c for c in chapters if c[2] or c[3]]
+    chapters = [c for c in chapters if c[3] or c[4]]
     today = datetime.date.today().isoformat()
 
-    opf_items = []
-    ncx_points = []
-    xhtml_files = []
-
-    # cover
+    opf_items, ncx_points, xhtml_files = [], [], []
     xhtml_files.append(("cover.xhtml", COVER))
     opf_items.append('<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/>')
     ncx_points.append('<navPoint id="np-cover" playOrder="1"><navLabel><text>封面</text></navLabel><content src="cover.xhtml"/></navPoint>')
 
     play = 2
-    for i, (num, title, entries, items) in enumerate(chapters):
+    titles = {"cover.xhtml": "封面"}
+    for num, title, intro, entries, items in chapters:
         fn = "ch%02d.xhtml" % num
-        xhtml_files.append((fn, chapter_xhtml(num, title, entries, items)))
+        titles[fn] = title
+        xhtml_files.append((fn, chapter_xhtml(num, title, intro, entries, items)))
         opf_items.append('<item id="ch%d" href="%s" media-type="application/xhtml+xml"/>' % (num, fn))
         ncx_points.append('<navPoint id="np-%d" playOrder="%d"><navLabel><text>%s</text></navLabel><content src="%s"/></navPoint>' % (num, play, esc(title), fn))
         play += 1
 
-    # content.opf
     manifest = "\n    ".join(opf_items)
-    spine = "\n    ".join('<itemref idref="%s"/>' % (
-        "cover" if fn == "cover.xhtml" else fn.replace(".xhtml", "")) for fn, _ in xhtml_files)
+    spine = "\n    ".join('<itemref idref="%s"/>' % (fn.replace(".xhtml", "")) for fn, _ in xhtml_files)
     opf = """<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="bookid">
   <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
@@ -193,9 +183,7 @@ def build():
   </spine>
 </package>""" % (UID, esc(TITLE), esc(AUTHOR), today, today, manifest, spine)
 
-    # nav.xhtml (EPUB3 TOC)
-    nav_li = "\n".join('<li><a href="%s">%s</a></li>' % (
-        fn if fn == "cover.xhtml" else fn, esc(title) if fn == "cover.xhtml" else esc(title)) for fn, _ in xhtml_files)
+    nav_li = "\n".join('<li><a href="%s">%s</a></li>' % (fn, esc(titles.get(fn, fn))) for fn, _ in xhtml_files)
     nav = """<?xml version="1.0" encoding="utf-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/epub">
 <head><title>目录</title></head>
@@ -206,7 +194,6 @@ def build():
 </nav>
 </body></html>""" % nav_li
 
-    # toc.ncx (EPUB2 fallback)
     ncx = """<?xml version="1.0" encoding="utf-8"?>
 <ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
 <head>
@@ -221,7 +208,6 @@ def build():
 </navMap>
 </ncx>""" % (UID, esc(TITLE), "\n".join(ncx_points))
 
-    # 打包
     with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED) as z:
         z.writestr("mimetype", "application/epub+zip", compress_type=zipfile.ZIP_STORED)
         z.writestr("META-INF/container.xml",
@@ -233,7 +219,7 @@ def build():
         for fn, content in xhtml_files:
             z.writestr("OEBPS/" + fn, content)
 
-    total_entries = sum(len(c[2]) for c in chapters)
+    total_entries = sum(len(c[3]) for c in chapters)
     print("✅ 已生成 %s" % OUT)
     print("   章节：%d ｜ 条目：%d" % (len(chapters), total_entries))
 
