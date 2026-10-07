@@ -28,8 +28,22 @@ HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OWNER = "leo-bone"
 REPO = "HowToInvestBetter"
 
+def get_token():
+    t = os.environ.get("GITHUB_TOKEN", "")
+    if t:
+        return t
+    # 回退：从 .git/config 的 origin URL 读取（_github_setup.py 曾写入）
+    cfg = os.path.join(HERE, ".git", "config")
+    if os.path.exists(cfg):
+        import re
+        txt = open(cfg, encoding="utf-8").read()
+        m = re.search(r"url = https://[^:]+:([^@]{5,})@github\.com", txt)
+        if m:
+            return m.group(1)
+    return ""
+
 def main():
-    token = os.environ.get("GITHUB_TOKEN", "")
+    token = get_token()
     repo = Repo(HERE)
     # 设默认分支 main
     os.makedirs(os.path.join(HERE, ".git"), exist_ok=True)
