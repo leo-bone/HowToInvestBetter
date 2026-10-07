@@ -131,7 +131,18 @@ b{color:#c0392b;}
 .revlist li{margin:.4em 0;}
 """
 
-COVER = """<?xml version="1.0" encoding="utf-8"?>
+COVER_IMG = os.path.join(ROOT, "cover.png")
+HAVE_COVER_IMG = os.path.exists(COVER_IMG)
+
+if HAVE_COVER_IMG:
+    COVER = """<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>%s</title></head>
+<body style="text-align:center;padding-top:2em;">
+<img src="cover.png" style="width:86%%;max-width:520px;" alt="%s"/>
+</body></html>""" % (esc(TITLE), esc(TITLE))
+else:
+    COVER = """<?xml version="1.0" encoding="utf-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head><title>%s</title></head>
 <body style="text-align:center;padding-top:4em;">
@@ -139,6 +150,29 @@ COVER = """<?xml version="1.0" encoding="utf-8"?>
 <p style="font-size:1.1em;">花掉什么，换回什么，证据有多硬</p>
 <p style="color:#777;">开源 · CC BY 4.0</p>
 </body></html>""" % (esc(TITLE), esc(TITLE))
+
+
+def preface_xhtml():
+    return """<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<head><title>导读</title></head>
+<body>
+<h1 class="ch">导读 · 怎么读这本指南</h1>
+<p class="intro">这是一份循证投资手册。它不推荐任何具体产品，只把经过统计、研究与监管文件验证的“高性价比动作”列成一张可按图索骥的清单。每条都用同一套账本：花掉什么、换回什么、证据多硬、出处哪来。</p>
+<h3>四个问题</h3>
+<p class="intro">1. 花掉什么？钱、时间、毅力，还是本金的永久性损失？</p>
+<p class="intro">2. 换回什么？长期真实回报、更低波动、税费节省，还是避开归零？</p>
+<p class="intro">3. 证据多硬？见下方证据等级。</p>
+<p class="intro">4. 出处哪来？只引期刊论文与官方文件，不引自媒体与营销号。</p>
+<h3>证据等级</h3>
+<p class="intro">〔A〕权威长期统计（标普 SPIVA、交易所年鉴）、顶刊随机或追踪研究、官方监管文件。</p>
+<p class="intro">〔B〕单项高质量研究、权威机构（Vanguard／Dalbar／Ibbotson）回测报告、经典论文。</p>
+<p class="intro">〔C〕合理推论或广泛共识，逻辑硬但未必挂精确出处。</p>
+<h3>三零原则（极高性价比死标准）</h3>
+<p class="intro">一条动作若“花费等于无、时间等于无、毅力等于否”三项成本全为零，就是“三零”。严格符合的共 16 条，闭眼先做；更多动作是“两项为零、一项极低”的高性价比档，可用检索页按“花费／时间／毅力”分别筛“无”来挖掘。</p>
+<h3>阅读建议</h3>
+<p class="intro">不用全做，这是备选单不是任务清单。挑走一两条就算数。想省时间先按“仅三零”筛；每章内条目按性价比从高到低排，从每章前几条看起；看不懂就只读每一条的“说人话”一行。</p>
+</body></html>"""
 
 
 def build():
@@ -151,8 +185,15 @@ def build():
     opf_items.append('<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/>')
     ncx_points.append('<navPoint id="np-cover" playOrder="1"><navLabel><text>封面</text></navLabel><content src="cover.xhtml"/></navPoint>')
 
-    play = 2
-    titles = {"cover.xhtml": "封面"}
+    xhtml_files.append(("preface.xhtml", preface_xhtml()))
+    opf_items.append('<item id="preface" href="preface.xhtml" media-type="application/xhtml+xml"/>')
+    ncx_points.append('<navPoint id="np-preface" playOrder="2"><navLabel><text>导读</text></navLabel><content src="preface.xhtml"/></navPoint>')
+
+    if HAVE_COVER_IMG:
+        opf_items.append('<item id="coverimg" href="cover.png" media-type="image/png"/>')
+
+    play = 3
+    titles = {"cover.xhtml": "封面", "preface.xhtml": "导读"}
     for num, title, intro, entries, items in chapters:
         fn = "ch%02d.xhtml" % num
         titles[fn] = title
@@ -172,16 +213,19 @@ def build():
     <dc:language>zh-CN</dc:language>
     <dc:date>%s</dc:date>
     <meta property="dcterms:modified">%sT00:00:00Z</meta>
+    %s
   </metadata>
   <manifest>
     <item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>
     <item id="css" href="styles.css" media-type="text/css"/>
-    %s
+        %s
   </manifest>
   <spine>
     %s
   </spine>
-</package>""" % (UID, esc(TITLE), esc(AUTHOR), today, today, manifest, spine)
+</package>""" % (UID, esc(TITLE), esc(AUTHOR), today, today,
+                ('<meta property="rendition:cover">coverimg</meta>' if HAVE_COVER_IMG else ''),
+                manifest, spine)
 
     nav_li = "\n".join('<li><a href="%s">%s</a></li>' % (fn, esc(titles.get(fn, fn))) for fn, _ in xhtml_files)
     nav = """<?xml version="1.0" encoding="utf-8"?>
@@ -218,6 +262,9 @@ def build():
         z.writestr("OEBPS/styles.css", CSS)
         for fn, content in xhtml_files:
             z.writestr("OEBPS/" + fn, content)
+        if HAVE_COVER_IMG:
+            with open(COVER_IMG, "rb") as fh:
+                z.writestr("OEBPS/cover.png", fh.read())
 
     total_entries = sum(len(c[3]) for c in chapters)
     print("✅ 已生成 %s" % OUT)

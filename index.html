@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>高性价比投资指南 · 在线检索页</title>
 <meta name="description" content="循证投资手册：每条写明花掉什么、换回什么、证据多硬，只引论文与官方文件。可按关键词、章节、证据等级、成本维度筛选。">
+<meta property="og:title" content="高性价比投资指南 · 循证投资手册">
+<meta property="og:description" content="302 条可推敲的投资建议：每条写明花掉什么、换回什么、证据多硬，只引期刊论文与官方文件。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://leo-bone.github.io/HowToInvestBetter/">
+<meta property="og:image" content="https://leo-bone.github.io/HowToInvestBetter/cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="高性价比投资指南 · 循证投资手册">
+<meta name="twitter:description" content="302 条可推敲的投资建议，只引期刊论文与官方文件。">
+<meta name="twitter:image" content="https://leo-bone.github.io/HowToInvestBetter/cover.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230f1b2d'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='%232f9e44' font-family='sans-serif'%3E%C2%A5%3C/text%3E%3C/svg%3E">
 <style>
   :root{
     --ink:#1f2933; --sub:#52606d; --line:#e4e7eb; --bg:#fbfbfa;
@@ -22,6 +32,22 @@
   .badges{font-size:12px;color:var(--sub);margin:6px 0 14px;}
   .badges span{display:inline-block;background:#fff;border:1px solid var(--line);
     border-radius:20px;padding:2px 10px;margin:0 6px 6px 0;}
+  .guide{border:1px solid var(--line);border-radius:12px;background:#fff;margin:12px 0 8px;overflow:hidden;}
+  .guide>summary{cursor:pointer;padding:12px 16px;font-weight:700;font-size:14px;
+    list-style:none;background:#f8fafc;}
+  .guide>summary::-webkit-details-marker{display:none;}
+  .guide>summary:before{content:"▸ ";color:var(--zero);}
+  .guide[open]>summary:before{content:"▾ ";}
+  .guide .gb{padding:6px 18px 16px;font-size:14px;}
+  .guide ol{margin:8px 0;padding-left:22px;}
+  .guide ol li{margin:5px 0;}
+  .guide .legend{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px;}
+  .guide .lc{font-size:12px;padding:3px 10px;border-radius:20px;font-weight:700;}
+  .guide .lcA{background:var(--tagA);color:var(--a);}
+  .guide .lcB{background:var(--tagB);color:var(--b);}
+  .guide .lcC{background:var(--tagC);color:var(--c);}
+  .guide .lcZ{background:#ebfbee;color:var(--zero);border:1px solid #b2f2bb;}
+  .guide .tip{color:var(--sub);font-size:13px;margin:6px 0 0;}
   .toolbar{position:sticky;top:0;background:rgba(251,251,250,.97);backdrop-filter:blur(6px);
     border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:14px 0 8px;z-index:5;
     display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
@@ -35,6 +61,9 @@
   .stat{font-size:12.5px;color:var(--sub);margin:6px 0 14px;}
   .ch-head{font-size:19px;margin:30px 0 6px;padding-top:14px;border-top:2px solid var(--line);}
   .ch-sub{font-size:13px;color:var(--sub);margin:0 0 10px;}
+  .ch-intro{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:0 0 14px;font-size:13.5px;color:#334155;}
+  .ch-intro b{color:var(--ink);}
+  .ch-intro a.ref{color:var(--a);cursor:pointer;text-decoration:underline dotted;}
   .card{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:13px 16px;margin:11px 0;
     box-shadow:0 1px 2px rgba(15,23,42,.03);scroll-margin-top:120px;}
   .card.flash{outline:3px solid var(--zero);outline-offset:2px;}
@@ -59,9 +88,11 @@
   .foot{margin-top:46px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-size:12px;}
   .empty{color:var(--sub);text-align:center;padding:40px 0;font-size:14px;}
   .togglehint{font-size:12px;color:var(--sub);margin-top:4px;}
-  .copy{font-size:11px;color:var(--a);cursor:pointer;margin-left:6px;user-select:none;border:1px solid var(--line);
+  .acts{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;}
+  .copy,.share{font-size:11px;color:var(--a);cursor:pointer;user-select:none;border:1px solid var(--line);
     border-radius:20px;padding:1px 8px;}
-  .copy:hover{background:#e3fafc;}
+  .copy:hover,.share:hover{background:#e3fafc;}
+  .share{color:var(--zero);}
   .toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:var(--ink);color:#fff;
     padding:8px 16px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:20;}
   .toast.show{opacity:.95;}
@@ -71,8 +102,28 @@
 <body>
 <div class="wrap">
   <h1>高性价比投资指南 <span style="font-size:14px;color:var(--sub)">· 在线检索页</span></h1>
-  <p class="lede">循证投资手册：每条写明<b>成本、收益、证据等级、来源</b>，只引期刊论文与官方文件。每条都标了成本标签（钱／时间／毅力／收益），可筛选。</p>
+  <p class="lede">循证投资手册：每条写明<b>成本、收益、证据等级、来源</b>，只引期刊论文与官方文件。每条都标了成本标签（钱／时间／毅力／收益），可筛选、可分享。</p>
   <div class="badges" id="badges"></div>
+
+  <details class="guide" open>
+    <summary>📖 30 秒看懂：这本指南怎么用</summary>
+    <div class="gb">
+      <p>每条建议都用同一套账本，你只要回答四个问题：</p>
+      <ol>
+        <li><b>花掉什么？</b> 钱、时间、毅力，还是本金的<b>永久性损失</b>？</li>
+        <li><b>换回什么？</b> 长期真实回报、更低波动、税费节省，还是<b>避开归零</b>？</li>
+        <li><b>证据多硬？</b> 〔A〕权威统计·顶刊·官方文件 ｜ 〔B〕单项研究·机构报告 ｜ 〔C〕合理推论·法规</li>
+        <li><b>出处哪来？</b> 只引期刊论文与官方文件，不引自媒体与营销号。</li>
+      </ol>
+      <div class="legend">
+        <span class="lc lcA">证据 A · 权威统计/顶刊/官方文件</span>
+        <span class="lc lcB">证据 B · 单项研究/机构报告</span>
+        <span class="lc lcC">证据 C · 合理推论/法规</span>
+        <span class="lc lcZ">三零 · 花钱/时间/毅力成本全为 0，闭眼先做</span>
+      </div>
+      <p class="tip">用法：顶部可<b>搜关键词</b>、按<b>证据等级</b>与<b>花费/时间/毅力/收益</b>筛选，或点「仅三零」挖极高性价比动作；点任意条目下的「📋 复制引用」可贴走完整出处，「🔗 复制链接」可把这一条单独发给朋友。</p>
+    </div>
+  </details>
 
   <div class="toolbar">
     <input type="text" id="q" placeholder="搜索：费率、杠杆、庞氏、指数、黄金…">
@@ -132,6 +183,14 @@
     return esc(s).replace(/第(\d+)章第(\d+)条/g,
       '<a class="ref" data-c="$1" data-n="$2">第$1章第$2条</a>');
   }
+  // 章导语轻量 markdown：加粗 **x** + 交叉引用链接（第X条 / 第X章第X条）
+  function mdlight(s, chap){
+    var t = esc(s);
+    t = t.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+    t = t.replace(/第(\d+)章第(\d+)条/g, '<a class="ref" data-c="$1" data-n="$2">第$1章第$2条</a>');
+    t = t.replace(/第(\d+)条/g, '<a class="ref" data-c="'+chap+'" data-n="$1">第$1条</a>');
+    return t;
+  }
   function chip(label,val){
     var cls = (val==='0'||val==='否') ? 'cost no' : (val==='多'?'cost big':'cost');
     return '<span class="'+cls+'">'+label+'·'+esc(val)+'</span>';
@@ -167,7 +226,8 @@
       '<div class="row"><span class="k">收益</span><span>'+linkify(e.gain)+'</span></div>'+
       '<div class="row"><span class="k">来源</span><span>'+esc(e.source)+'</span></div>'+
       note+
-      '<span class="copy" data-c="'+e.chapter+'" data-n="'+e.num+'">📋 复制引用</span></div>';
+      '<div class="acts"><span class="copy" data-c="'+e.chapter+'" data-n="'+e.num+'">📋 复制引用</span>'+
+      '<span class="share" data-c="'+e.chapter+'" data-n="'+e.num+'">🔗 复制链接</span></div></div>';
   }
 
   function render(){
@@ -193,7 +253,8 @@
       var vis=es.filter(pass);
       if(!vis.length) return;
       shown+=vis.length;
-      var intro = (c.intro&&c.intro.length) ? '<p class="ch-sub">'+esc(c.intro.join(' '))+'</p>' : '';
+      var intro = (c.intro&&c.intro.length)
+        ? '<div class="ch-intro">'+c.intro.map(function(p){return mdlight(p, c.num);}).join(' ')+'</div>' : '';
       html+='<h2 class="ch-head">'+cname+'</h2>'+intro+
         '<p class="ch-sub">本章 '+es.length+' 条，显示 '+vis.length+' 条。</p>'+
         vis.map(card).join('');
@@ -258,6 +319,15 @@
         function(){toast('复制失败，请手动选择');});
     } else { toast('当前环境不支持自动复制'); }
   });
+  document.getElementById('out').addEventListener('click',function(ev3){
+    var a=ev3.target.closest&&ev3.target.closest('.share');
+    if(!a) return;
+    var link=location.origin+location.pathname+'#e-'+a.dataset.c+'-'+a.dataset.n;
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(link).then(function(){toast('已复制本条链接 ✓');},
+        function(){toast('复制失败，请手动复制地址栏');});
+    } else { toast('当前环境不支持自动复制'); }
+  });
 
   document.getElementById('out').addEventListener('click',function(ev2){
     var a=ev2.target.closest&&ev2.target.closest('a.ref');
@@ -273,6 +343,15 @@
     '所有引用以各机构最新官方发布为准。本指南为独立创作的循证方法论手册。';
 
   render();
+
+  // 打开带锚点（如 #e-1-5）时，定位并高亮对应条目
+  if(location.hash && location.hash.indexOf('#e-')===0){
+    setTimeout(function(){
+      var el=document.getElementById(location.hash.slice(1));
+      if(el){el.scrollIntoView({block:'center'});
+        el.classList.add('flash'); setTimeout(function(){el.classList.remove('flash');},1800);}
+    }, 300);
+  }
 })();
 </script>
 </body>

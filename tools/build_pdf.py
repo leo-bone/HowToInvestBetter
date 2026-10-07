@@ -31,8 +31,12 @@ from reportlab.lib.enums import TA_CENTER, TA_LEFT
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.cidfonts import UnicodeCIDFont
 from reportlab.platypus import (
-    SimpleDocTemplate, Paragraph, Spacer, PageBreak, HRFlowable, KeepTogether
+    SimpleDocTemplate, Paragraph, Spacer, PageBreak, HRFlowable, KeepTogether, Image
 )
+try:
+    from PIL import Image as _PILImage
+except Exception:
+    _PILImage = None
 
 pdfmetrics.registerFont(UnicodeCIDFont("STSong-Light"))
 FONT = "STSong-Light"
@@ -151,13 +155,37 @@ def build():
     )
     story = []
 
-    story.append(Spacer(1, 55 * mm))
-    story.append(Paragraph(esc(TITLE), COVER_T))
-    story.append(Spacer(1, 6 * mm))
-    story.append(Paragraph(esc(SUB), COVER_S))
-    story.append(Spacer(1, 10 * mm))
-    story.append(Paragraph("开源 · CC BY 4.0", COVER_F))
-    story.append(Paragraph("更新于 %s · 共 %d 章 %d 条" % (today, len(chapters), total_entries), COVER_F))
+    story.append(Spacer(1, 40 * mm))
+    cover_png = os.path.join(ROOT, "cover.png")
+    if os.path.exists(cover_png) and _PILImage is not None:
+        w, h = _PILImage.open(cover_png).size
+        tw = 150 * mm
+        im = Image(cover_png, width=tw, height=tw * h / w)
+        story.append(im)
+        story.append(Spacer(1, 8 * mm))
+        story.append(Paragraph("开源 · CC BY 4.0", COVER_F))
+        story.append(Paragraph("更新于 %s · 共 %d 章 %d 条" % (today, len(chapters), total_entries), COVER_F))
+    else:
+        story.append(Paragraph(esc(TITLE), COVER_T))
+        story.append(Spacer(1, 6 * mm))
+        story.append(Paragraph(esc(SUB), COVER_S))
+        story.append(Spacer(1, 10 * mm))
+        story.append(Paragraph("开源 · CC BY 4.0", COVER_F))
+        story.append(Paragraph("更新于 %s · 共 %d 章 %d 条" % (today, len(chapters), total_entries), COVER_F))
+    story.append(PageBreak())
+
+    # 导读页
+    story.append(Paragraph("导读 · 怎么读这本指南", H1))
+    story.append(HRFlowable(width="100%", color=HexColor("#c0392b"), thickness=1, spaceAfter=8))
+    intro_items = [
+        "这是一份循证投资手册。它不推荐任何具体产品，只把经过统计、研究与监管文件验证的「高性价比动作」列成一张可按图索骥的清单。每条都用同一套账本：花掉什么、换回什么、证据多硬、出处哪来。",
+        "四个问题：① 花掉什么？钱、时间、毅力，还是本金的永久性损失？② 换回什么？长期真实回报、更低波动、税费节省，还是避开归零？③ 证据多硬？见下方证据等级。④ 出处哪来？只引期刊论文与官方文件，不引自媒体与营销号。",
+        "证据等级：〔A〕权威长期统计（标普 SPIVA、交易所年鉴）、顶刊随机或追踪研究、官方监管文件。〔B〕单项高质量研究、权威机构（Vanguard／Dalbar／Ibbotson）回测报告、经典论文。〔C〕合理推论或广泛共识，逻辑硬但未必挂精确出处。",
+        "三零原则（极高性价比死标准）：一条动作若「花费等于无、时间等于无、毅力等于否」三项成本全为零，就是「三零」。严格符合的共 16 条，闭眼先做；更多动作是「两项为零、一项极低」的高性价比档。",
+        "阅读建议：不用全做，这是备选单不是任务清单。挑走一两条就算数。想省时间先按「仅三零」筛；每章内条目按性价比从高到低排，从每章前几条看起；看不懂就只读每一条的「说人话」一行。",
+    ]
+    for it in intro_items:
+        story.append(Paragraph(esc(it), INTRO))
     story.append(PageBreak())
 
     story.append(Paragraph("目录", H1))

@@ -1,5 +1,5 @@
 window.BOOK_DATA = {
- "updated": "2026-10-07",
+ "updated": "2026-10-08",
  "chapters": [
   {
    "num": 1,
