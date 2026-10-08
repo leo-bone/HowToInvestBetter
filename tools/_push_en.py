@@ -56,12 +56,10 @@ def main():
     porcelain.add(repo, files)
     print("[ok] staged %d files" % len(files), flush=True)
 
-    msg = ("英文版 KDP 出版物料就绪：新增 tools/gen_cover_en.py 生成英文电子书封面 "
-           "cover-book-en.png(1600x2560)、纸书完整书封 cover-paperback-en.pdf/.png"
-           "(366 页书脊 0.8242\"，全封面 13.0742\"x9.2500\"，含出血/条码区)、社交卡 en-cover.png；"
-           "EPUB 改为内嵌真实封面图（EPUB3 properties=cover-image + Kindle <meta name=cover>）；"
-           "新增 KDP-英文版填报表.md（书名/副标题/描述/关键词/分类/定价/上传资产/印刷参数，复制即用）；"
-           "README 与 i18n/README.en.md 接入英文封面与英文出版入口。")
+    msg = ("英文版 KDP 推广包：新增 KDP-英文版上线推广包.md（作者样书验收清单 + 最终 Amazon HTML "
+           "描述含 GitHub 引流段 + X/Reddit/Newsletter 英文首发文案 + 上线后 30 天节奏）；"
+           "KDP-英文版填报表.md 描述升级为最终 HTML 版并指向推广包；en/index.html 与 en/offline.html "
+           "加 Amazon 搜索入口（免费全文→付费便携版导流闭环）；重跑 build_en.py 确认 0 lint。")
     porcelain.commit(repo, message=msg.encode("utf-8"),
                      author=b"leo-bone <57990177@qq.com>",
                      committer=b"leo-bone <57990177@qq.com>")

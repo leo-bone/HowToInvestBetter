@@ -25,23 +25,34 @@
 
 ## 2. Description（简介 · 整段复制）
 
+```html
+<h2>Most investing books tell you what to do. This one shows you the evidence — and the price tag.</h2>
+
+<p><b>A High-Value Investment Guidebook</b> is a field manual of <b>302 independent, debatable moves</b>, each one rated for what it costs you, what it returns, and how strong the evidence behind it really is.</p>
+
+<p>Every entry carries a transparent <b>Evidence Grade</b>:</p>
+<ul>
+<li><b>A</b> — hard regulation or settled research</li>
+<li><b>B</b> — strong statistical regularity</li>
+<li><b>C</b> — plausible but unproven</li>
+</ul>
+<p>…and cites only primary sources: peer-reviewed journals, securities regulators, and official tax codes. No gurus. No "trust me." No affiliate links.</p>
+
+<p>Inside you'll find:</p>
+<ul>
+<li><b>24 chapters</b> covering fees &amp; taxes, index investing, investor behavior, asset allocation, retirement, real estate, insurance, crypto, and the moves that quietly destroy returns.</li>
+<li>The <b>"Three-Zero" shortlist</b>: 16 entries that cost almost nothing, take little time, and need no willpower — yet reliably improve outcomes.</li>
+<li>Plain-language translations of the academic findings that actually move the needle, with the original citations so you can verify them yourself.</li>
+</ul>
+
+<p><b>Who it's for:</b> the self-directed investor who is tired of conflicting advice and wants a calm, evidence-first map of what's worth doing — and what's not.</p>
+
+<p>The full text is also <b>free to read online and open source</b> (CC BY 4.0). This Kindle / paperback edition is the carefully formatted, citation-linked, portable version — built for the reader who wants the whole map in one place.</p>
+
+<p><i>Open source under Creative Commons CC BY 4.0. Author: leo-bone.</i></p>
 ```
-A no-hype, evidence-based investing manual.
 
-Across 24 chapters and 302 entries, every action states three things plainly:
-
-WHAT IT COSTS - fees, taxes, time, effort, and permanent loss of capital.
-WHAT IT RETURNS - long-term real returns, lower volatility, tax savings, and avoiding wipeouts.
-HOW STRONG THE EVIDENCE IS - A (authoritative statistics, top journals, official documents), B (single studies, institutional reports), C (reasonable inference, regulation).
-
-Every entry cites its original sources. Only peer-reviewed papers and official documents - never self-media or marketing accounts.
-
-It also introduces the "Three-Zero Principle": do first the moves that cost zero money, zero time, and zero willpower.
-
-For ordinary investors who want to pay less tuition and stop being harvested.
-```
-
-> KDP 描述支持有限 HTML：可加 `<b>bold</b>`、`<br>`、`<h2>`、`<ul><li>`。上面纯文本可直接用；想更好看可用 `<b>` 包住每行标题。
+> 最终版（含 GitHub 引流段）。社媒文案、样书验收清单、30 天节奏见 [`KDP-英文版上线推广包.md`](KDP-英文版上线推广包.md)。
 
 ---
 
