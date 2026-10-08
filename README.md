@@ -22,7 +22,7 @@
 | **长文** | [全书导读](GUIDE.md)（为什么写这本书／三零原则／证据体系／章节地图） |
 | **正文源文件** | [`book/`](book/) 下的 Markdown，可在线直接读，也是检索页的数据源 |
 | **其他语言** | [English](i18n/README.en.md) · [Русский](i18n/README.ru.md) · [Español](i18n/README.es.md) · [Português](i18n/README.pt.md) · [Deutsch](i18n/README.de.md) · [Tiếng Việt](i18n/README.vi.md) |
-| **出版** | [亚马逊 KDP 上架方案](AMAZON-上架方案.md)（竞品分析 · 格式清单 · 行动步骤）· 版权声明见 [版权声明](版权声明.md)（CC BY 4.0，沿用《高性价比人生指南》方法论并署名） |
+| **出版** | [亚马逊 KDP 上架方案](AMAZON-上架方案.md)（竞品分析 · 格式清单 · 行动步骤）· [KDP 上传操作指南](KDP-上传操作指南.md)（逐屏照抄字段）· [KDP 中文版填报表](KDP-中文版填报表.md)（复制即用）· 版权声明见 [版权声明](版权声明.md)（CC BY 4.0，沿用《高性价比人生指南》方法论并署名） |
 
 ---
 
