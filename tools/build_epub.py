@@ -29,7 +29,7 @@ FIELDS = ["成本", "说人话", "收益", "证据等级", "来源", "备注"]
 
 TITLE = "高性价比投资指南"
 AUTHOR = "leo"
-UID = "howtoinvestbetter-2026"
+UID = "7b2d5a91-3c8e-4f17-a5b6-0d9e2c7f4a58"
 COPYRIGHT_FILE = os.path.join(ROOT, "版权声明.md")
 
 
@@ -87,6 +87,37 @@ def parse_book():
 def esc(s):
     return _html.escape(s or "", quote=True)
 
+def inline(s):
+    """先转义，再把正文里轻量 Markdown 的 **粗体** 还原成 HTML。
+    中文正文里的单星号（*ST 退市风险警示、204* 债券代码、收益* 等）都是字面符号，
+    不做斜体转换，原样保留。"""
+    s = esc(s)
+    s = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", s)
+    return s
+
+
+def _opf_gate(opf_text, written):
+    """引用完整性门禁：每个 <itemref> 必须能解析到 manifest 里的 id，
+    且 manifest 的每个 href 都必须在包内真实存在。专门拦下
+    『manifest id 写成 ch1、spine 却写 ch01』这一类会让 KDP 直接拒收
+    （"file is not properly structured / cannot convert"）的错误。"""
+    import xml.etree.ElementTree as _ET
+    NS = "{http://www.idpf.org/2007/opf}"
+    root = _ET.fromstring(opf_text.encode("utf-8"))
+    man = root.find(NS + "manifest")
+    spine = root.find(NS + "spine")
+    ids = {it.get("id") for it in man}
+    hrefs = [it.get("href") for it in man if it.get("href")]
+    bad = [it.get("idref") for it in spine if it.get("idref") not in ids]
+    if bad:
+        raise SystemExit("\u274c OPF gate: dangling spine idrefs -> %s" % bad)
+    miss = [h for h in hrefs if h not in written]
+    if miss:
+        raise SystemExit("\u274c OPF gate: manifest hrefs missing from package -> %s" % miss)
+    print("\u2705 OPF gate: %d manifest ids / %d spine refs \u5168\u90e8\u80fd\u89e3\u6790" % (len(ids), len(spine)))
+
+
+
 
 def tagline(tags):
     return "钱：%s ｜ 时间：%s ｜ 毅力：%s ｜ 收益：%s ｜ 口径：%s" % (
@@ -100,7 +131,7 @@ def chapter_xhtml(num, title, intro, entries, items):
     parts.append("<head><title>%s</title></head><body>" % esc(title))
     parts.append('<h1 class="ch">%s</h1>' % esc(title))
     for para in intro:
-        parts.append('<p class="intro">%s</p>' % esc(para))
+        parts.append('<p class="intro">%s</p>' % inline(para))
     if entries:
         for e in entries:
             parts.append('<div class="entry">')
@@ -109,7 +140,7 @@ def chapter_xhtml(num, title, intro, entries, items):
             for k in FIELDS:
                 v = e["fields"].get(k)
                 if v:
-                    parts.append('<p><b>%s：</b>%s</p>' % (k, esc(v)))
+                    parts.append('<p><b>%s：</b>%s</p>' % (k, inline(v)))
             parts.append('</div>')
     else:
         parts.append('<ul class="revlist">')
@@ -244,7 +275,7 @@ def build():
         fn = "ch%02d.xhtml" % num
         titles[fn] = title
         xhtml_files.append((fn, chapter_xhtml(num, title, intro, entries, items)))
-        opf_items.append('<item id="ch%d" href="%s" media-type="application/xhtml+xml"/>' % (num, fn))
+        opf_items.append('<item id="%s" href="%s" media-type="application/xhtml+xml"/>' % (fn.replace(".xhtml", ""), fn))
         ncx_points.append('<navPoint id="np-%d" playOrder="%d"><navLabel><text>%s</text></navLabel><content src="%s"/></navPoint>' % (num, play, esc(title), fn))
         play += 1
 
@@ -270,7 +301,7 @@ def build():
     %s
   </spine>
 </package>""" % (UID, esc(TITLE), esc(AUTHOR), today, today,
-                ('<meta property="rendition:cover">coverimg</meta>' if HAVE_COVER_IMG else ''),
+                ('<meta name="cover" content="coverimg"/>' if HAVE_COVER_IMG else ''),
                 manifest, spine)
 
     nav_li = "\n".join('<li><a href="%s">%s</a></li>' % (fn, esc(titles.get(fn, fn))) for fn, _ in xhtml_files)
@@ -311,6 +342,8 @@ def build():
         except Exception as _e:
             raise SystemExit("\u274c XML invalid in %s: %s" % (_name, _e))
     print("\u2705 XML gate: %d content documents are well-formed" % len(_docs))
+    _written = {fn for fn, _ in xhtml_files} | {"nav.xhtml", "toc.ncx", "styles.css", "cover.png"}
+    _opf_gate(opf, _written)
 
     with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED) as z:
         z.writestr("mimetype", "application/epub+zip", compress_type=zipfile.ZIP_STORED)

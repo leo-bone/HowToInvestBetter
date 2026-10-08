@@ -63,6 +63,14 @@ def esc(s):
     return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
+def inline(s):
+    """先转义，再把正文里的 **粗体** 还原成 <b>。中文单星号一律按字面保留
+    （ST/*ST 退市警示、久期 D*、*%收益 等），不做斜体处理。"""
+    s = esc(s)
+    s = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", s)
+    return s
+
+
 def tagline(tags):
     return "钱：%s ｜ 时间：%s ｜ 毅力：%s ｜ 收益：%s ｜ 口径：%s" % (
         esc(tags.get("钱", "")), esc(tags.get("时间", "")), esc(tags.get("毅力", "")),
@@ -232,22 +240,22 @@ def build():
     story.append(HRFlowable(width="100%", color=HexColor("#c0392b"), thickness=1, spaceAfter=8))
     for num, title, intro, entries, items in chapters:
         cnt = "%d 条" % len(entries) if entries else "%d 项清单" % len(items)
-        story.append(Paragraph("第%d章　%s　<span color='#999999'>（%s）</span>" % (num, esc(title), cnt), BODY))
+        story.append(Paragraph("第%d章　%s　<span color='#999999'>（%s）</span>" % (num, inline(title), cnt), BODY))
     story.append(PageBreak())
 
     for num, title, intro, entries, items in chapters:
-        story.append(Paragraph("第%d章　%s" % (num, esc(title)), H1))
+        story.append(Paragraph("第%d章　%s" % (num, inline(title)), H1))
         story.append(HRFlowable(width="100%", color=HexColor("#e0e0e0"), thickness=0.6, spaceAfter=6))
         for para in intro:
-            story.append(Paragraph(esc(para), INTRO))
+            story.append(Paragraph(inline(para), INTRO))
         for e in entries:
             block = []
-            block.append(Paragraph("%d. %s" % (e["num"], esc(e["title"])), H2))
+            block.append(Paragraph("%d. %s" % (e["num"], inline(e["title"])), H2))
             block.append(Paragraph("<font color='#888888'>%s</font>" % tagline(e["tags"]), META))
             for k in FIELDS:
                 v = e["fields"].get(k)
                 if v:
-                    block.append(Paragraph("<font color='#c0392b'>%s：</font>%s" % (k, esc(v)), BODY))
+                    block.append(Paragraph("<font color='#c0392b'>%s：</font>%s" % (k, inline(v)), BODY))
             story.append(KeepTogether(block))
             story.append(Spacer(1, 3))
         if items:

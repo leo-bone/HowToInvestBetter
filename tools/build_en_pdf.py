@@ -77,6 +77,17 @@ def esc(s):
     return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
+def inline(s):
+    """先转义，再把正文里轻量 Markdown 的 **粗体** / *斜体* 还原成 HTML。
+    先把字面星号（*ST 退市风险警示、204* 债券代码）保护起来，避免误配成斜体；
+    斜体要求开星号前是空白、闭星号后是空白/标点，防止跨句误配。"""
+    s = esc(s)
+    s = s.replace("*ST", "\x01ST").replace("204*", "204\x01")
+    s = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", s)
+    s = re.sub(r'(?<!\S)\*([^\s*][^*\n]{0,98}?[^\s*])\*(?=[\s.,;:!?)\]"\u201d]|$)', r"<i>\1</i>", s)
+    return s.replace("\x01", "*")
+
+
 def tagline(tags):
     parts = []
     for key in ["money", "time", "will", "payoff", "scope", "impact"]:
@@ -223,25 +234,25 @@ def build():
     story.append(HRFlowable(width="100%", color=HexColor("#c0392b"), thickness=1, spaceAfter=8))
     for num, title, intro, entries, items in chapters:
         cnt = "%d entries" % len(entries) if entries else "%d-item list" % len(items)
-        story.append(Paragraph("Chapter %d  %s  <font color='#999999'>(%s)</font>" % (num, esc(title), cnt), BODY))
+        story.append(Paragraph("Chapter %d  %s  <font color='#999999'>(%s)</font>" % (num, inline(title), cnt), BODY))
     story.append(PageBreak())
 
     # --- Chapters ---
     for num, title, intro, entries, items in chapters:
-        story.append(Paragraph("Chapter %d  %s" % (num, esc(title)), H1))
+        story.append(Paragraph("Chapter %d  %s" % (num, inline(title)), H1))
         story.append(HRFlowable(width="100%", color=HexColor("#e0e0e0"), thickness=0.6, spaceAfter=6))
         for para in intro:
-            story.append(Paragraph(esc(para), INTRO))
+            story.append(Paragraph(inline(para), INTRO))
         for e in entries:
             block = []
-            block.append(Paragraph("%d. %s" % (e["num"], esc(e["title"])), H2))
+            block.append(Paragraph("%d. %s" % (e["num"], inline(e["title"])), H2))
             tl = tagline(e["tags"])
             if tl:
                 block.append(Paragraph("<font color='#888888'>%s</font>" % esc(tl), META))
             for k in FIELDS:
                 v = e["fields"].get(k)
                 if v:
-                    block.append(Paragraph("<font color='#c0392b'>%s:</font> %s" % (esc(k), esc(v)), BODY))
+                    block.append(Paragraph("<font color='#c0392b'>%s:</font> %s" % (esc(k), inline(v)), BODY))
             story.append(KeepTogether(block))
             story.append(Spacer(1, 3))
         if items:
