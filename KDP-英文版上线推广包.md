@@ -21,7 +21,7 @@ KDP 纸书上线前**务必先买一本 Author Copy**（比读者价便宜、不
 [ ] 8. 比对：样书与上传的 HowToInvestBetter-en-print.pdf 视觉一致（尤其书脊宽度）
 ```
 
-> ⚠️ 书脊 = 366 × 0.002252″ = 0.8242″，是按 **White 纸 + 当前页数** 算的。若样书书脊与封面不符，说明内文页数变了 → 重跑 `build_en_pdf.py --print` + `gen_cover_en.py` 再投稿。
+> ⚠️ 书脊 = 365 × 0.002252″ = 0.8220″，是按 **White 纸 + 当前页数** 算的。若样书书脊与封面不符，说明内文页数变了 → 重跑 `build_en_pdf.py --print` + `gen_cover_en.py` 再投稿。
 
 ---
 
@@ -129,6 +129,6 @@ Start with the "Three-Zero" shortlist — 16 moves that cost nothing and need no
 |---|---|---|
 | 电子书正文 | `HowToInvestBetter-en.epub` | KDP 上传（含内嵌封面） |
 | 电子书封面 | `cover-book-en.png` | 1600×2560 |
-| 纸书内文 | `HowToInvestBetter-en-print.pdf` | 366 页 / 6×9 / Bleed |
+| 纸书内文 | `HowToInvestBetter-en-print.pdf` | 365 页 / 6×9 / Bleed |
 | 纸书书封 | `cover-paperback-en.pdf` | 13.0742″×9.2500″ / 300 DPI |
 | 社交卡 | `en-cover.png` | 1200×630，社媒配图 |

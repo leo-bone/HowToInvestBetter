@@ -6551,7 +6551,7 @@ window.BOOK_DATA = {
    "cost": "对\"搞副业才叫搞钱\"的执念，以及把精力摊薄到十个浅层项目的注意力损耗。",
    "plain": "与其摊薄精力做十个浅副业，不如把主业做到前 20%，升职加薪的复利更猛。基本盘厚了，副业才稳。",
    "gain": "教育/技能回报率（明瑟收益率）在中国从 1988 年的 4.0% 升至 2001 年的 10.2%（Zhang et al. 2005，北大光华《研究简报》第 150 期汇总并采用 10% 为基准），即每多受一年教育、每提升一级技能，收入约增 10% 量级。Forbes 2026 年 JobLeads 研究更直白：从初级到中级职位平均涨薪 14%，从中级到高级平均涨 51%——级别跃迁的回报远高于任何横向副业。把时间砸在主业纵深（做到前 20%）、争取晋升到下一职级，其复利远胜分散做多个浅层副业；主业是基本盘，副业是锦上添花而非替代。",
-   "source": "北京大学光华管理学院 (2019). 《研究简报》第 150 期：中国长期全要素生产率的重新估算. <https://www.gsm.pku.edu.cn/thought_leadership/info/1110/2612.htm>; Forbes (2026). Should You Job-Hop Or Job-Hug? A New Study Offers Surprising Answers. <https://forbes-forbescom-live.non-prod.zephrcf.com/sites/bryanrobinson/2026/09/21/should-you-job-hop-or-job-hug-a-new-study-offers-surprising-answers>",
+   "source": "北京大学光华管理学院 (2019). 《研究简报》第 150 期：中国长期全要素生产率的重新估算. <https://www.gsm.pku.edu.cn/thought_leadership/info/1110/2612.htm>; Forbes (2026). Should You Job-Hop Or Job-Hug? A New Study Offers Surprising Answers. <https://www.forbes.com/sites/bryanrobinson/2026/09/21/should-you-job-hop-or-job-hug-a-new-study-offers-surprising-answers/>",
    "note": "技能溢价因行业与层级而异；过度专业化亦有被技术替代的风险（见条目 8）。"
   },
   {
@@ -6632,7 +6632,7 @@ window.BOOK_DATA = {
    "cost": "对\"跳槽涨薪\"或\"忠诚留任\"的极端化思维。",
    "plain": "一年一跳显得漂，十年不跳容易被压价。中间有个甜区——该跳时跳，该沉淀时沉淀。别走极端。",
    "gain": "跳槽确实能带来溢价——亚特兰大联储 Wage Growth Tracker 显示换工作者工资增速长期高于留守者（2026 年 8 月 5.0% vs 3.6%）。但 Forbes 2026 年 JobLeads 研究给出反平衡：仅 27% 受访者称\"换雇主\"带来职业生涯最大涨幅，31% 称\"内部晋升\"才是；69% 的跳槽者最近一次涨幅在 15% 以内。频繁跳槽（<10 个月）显出不稳定性、打断积累；长期不挪又易被内部定价压低、错过市场价位。研究普遍认为存在\"适度区间\"，且行业差异大〔争议〕——判断标准应是\"是否晋升到下一职级\"，而非\"是否换了公司\"。",
-   "source": "Federal Reserve Bank of Atlanta (2026). Wage Growth Tracker. <https://www.atlantafed.org/research-and-data/data/wage-growth-tracker>; Forbes (2026). Should You Job-Hop Or Job-Hug? A New Study Offers Surprising Answers. <https://forbes-forbescom-live.non-prod.zephrcf.com/sites/bryanrobinson/2026/09/21/should-you-job-hop-or-job-hug-a-new-study-offers-surprising-answers>",
+   "source": "Federal Reserve Bank of Atlanta (2026). Wage Growth Tracker. <https://www.atlantafed.org/research-and-data/data/wage-growth-tracker>; Forbes (2026). Should You Job-Hop Or Job-Hug? A New Study Offers Surprising Answers. <https://www.forbes.com/sites/bryanrobinson/2026/09/21/should-you-job-hop-or-job-hug-a-new-study-offers-surprising-answers/>",
    "note": "〔争议〕最优跳槽频次因行业与层级而异；以\"职级跃迁+市场价差≥10%\"作为触发条件更稳妥（见条目 2、11）。"
   },
   {
@@ -6767,7 +6767,7 @@ window.BOOK_DATA = {
    "cost": "副业占用主业精力的权衡，以及\"用副业掩盖主业停滞\"的自我欺骗。",
    "plain": "副业赚了点外快，却耽误了主业升职，那是亏的。副业不能伤基本盘，这是红线。",
    "gain": "副业若拖垮主业表现、耽误升职，机会成本极高。Forbes 2026 年 JobLeads 研究：从中级到高级职位平均涨薪 51%，远高于任何副业外快；内部晋升（31%）与外部跳槽（27%）是大多数人职业生涯最大涨幅的来源。换句话说，主业纵深带来的\"级别跃迁复利\"才是普通人收入曲线的主引擎，副业只是锦上添花。用\"是否损害基本盘\"作为副业的上限开关——当副业开始挤占你本可用于晋升、深度技能积累的时间，就该踩刹车。基本盘厚了，副业才稳（呼应条目 3）。",
-   "source": "Forbes (2026). Should You Job-Hop Or Job-Hug? A New Study Offers Surprising Answers. <https://forbes-forbescom-live.non-prod.zephrcf.com/sites/bryanrobinson/2026/09/21/should-you-job-hop-or-job-hug-a-new-study-offers-surprising-answers>; 北京大学光华管理学院 (2019). 《研究简报》第 150 期. <https://www.gsm.pku.edu.cn/thought_leadership/info/1110/2612.htm>",
+   "source": "Forbes (2026). Should You Job-Hop Or Job-Hug? A New Study Offers Surprising Answers. <https://www.forbes.com/sites/bryanrobinson/2026/09/21/should-you-job-hop-or-job-hug-a-new-study-offers-surprising-answers/>; 北京大学光华管理学院 (2019). 《研究简报》第 150 期. <https://www.gsm.pku.edu.cn/thought_leadership/info/1110/2612.htm>",
    "note": "与条目 3、6、7 联动；副业适合在基本盘稳固后作为\"多元化\"，而非主业停滞时的逃避。"
   },
   {
