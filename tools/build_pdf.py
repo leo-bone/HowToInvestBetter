@@ -9,7 +9,9 @@ HowToInvestBetter —— PDF 生成器（依赖 reportlab + 内置 CJK 字体）
   - 每章：章标题 + 章前导语 + 条目（标题/标签/成本·说人话·收益·证据等级·来源·备注）
   - 页脚页码
 
-中文字体使用 reportlab 内置的 Adobe CID 字体 STSong-Light（无需额外字体文件）。
+中文字体使用 macOS 系统字体 Songti SC（宋体，含 Regular/Bold），以 TrueType 子集方式
+完整嵌入 PDF。KDP 印刷要求「所有字体必须嵌入」，此前的 STSong-Light 是 Adobe CID
+字体、按引用外部字体渲染、并不嵌入文件内，会被 KDP 印前检查直接拒绝。
 
 用法：
   python3 tools/build_pdf.py
@@ -35,7 +37,7 @@ from reportlab.lib.colors import HexColor
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_LEFT
 from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.cidfonts import UnicodeCIDFont
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import (
     SimpleDocTemplate, Paragraph, Spacer, PageBreak, HRFlowable, KeepTogether, Image
 )
@@ -44,8 +46,47 @@ try:
 except Exception:
     _PILImage = None
 
-pdfmetrics.registerFont(UnicodeCIDFont("STSong-Light"))
-FONT = "STSong-Light"
+# ---- 嵌入式中文字体 -------------------------------------------------------
+# Songti SC（宋体）：正文衬线体，fsType=0x0008（Editable），允许嵌入与再分发文档。
+# 取 macOS 系统字体集合 Songti.ttc 中的两个子字体：
+#   index 6 = Songti SC Regular   index 1 = Songti SC Bold
+# 备注：collection 里 index 0 的 Songti SC Black 是 fsType=0x0002（禁止嵌入），故禁用。
+SONGTI_TTC = "/System/Library/Fonts/Supplemental/Songti.ttc"
+HEITI_TTC = "/System/Library/Fonts/STHeiti Light.ttc"      # 兜底：黑体（真宋体缺失时）
+PINGFANG_TTC = "/System/Library/Fonts/PingFang.ttc"        # 兜底：苹方（无衬线）
+
+
+def register_cjk_fonts():
+    """注册可嵌入的 CJK 字体家族，返回正文所用字体名。必须整套嵌入，否则 KDP 拒收。"""
+    if os.path.exists(SONGTI_TTC):
+        pdfmetrics.registerFont(TTFont("SongtiSC", SONGTI_TTC, subfontIndex=6))
+        pdfmetrics.registerFont(TTFont("SongtiSC-Bold", SONGTI_TTC, subfontIndex=1))
+        normal, bold = "SongtiSC", "SongtiSC-Bold"
+    elif os.path.exists(HEITI_TTC):
+        pdfmetrics.registerFont(TTFont("SongtiSC", HEITI_TTC, subfontIndex=1))
+        pdfmetrics.registerFont(TTFont("SongtiSC-Bold", HEITI_TTC, subfontIndex=1))
+        normal = bold = "SongtiSC"
+    elif os.path.exists(PINGFANG_TTC):
+        pdfmetrics.registerFont(TTFont("SongtiSC", PINGFANG_TTC, subfontIndex=2))
+        pdfmetrics.registerFont(TTFont("SongtiSC-Bold", PINGFANG_TTC, subfontIndex=5))
+        normal, bold = "SongtiSC", "SongtiSC-Bold"
+    else:
+        raise SystemExit("❌ 找不到可嵌入的中文字体（Songti.ttc 等），无法生成 KDP 合规 PDF")
+    pdfmetrics.registerFontFamily("SongtiSC", normal=normal, bold=bold,
+                                  italic=normal, boldItalic=bold)
+    # 让 reportlab 画布默认字体也走嵌入字体，避免 base-14 Helvetica 混进 PDF 资源
+    from reportlab import rl_config
+    rl_config.canvas_basefontname = normal
+    return normal
+
+
+FONT = register_cjk_fonts()
+# 纸书为黑白内页：把强调色降为灰阶（红字在黑白印刷下只会印成脏灰，且会让 PDF 里带彩色
+# 内容，KDP 会给出"含彩色内容"提示）。A4／网页／电子书版仍保留红色标题。
+ACCENT = "#333333" if PRINT_MODE else "#c0392b"
+NOTE_C = "#555555" if PRINT_MODE else "#8a6d1b"
+ACCENT_HEX = HexColor(ACCENT)
+
 
 TITLE = "高性价比投资指南"
 SUB = "花掉什么，换回什么，证据有多硬"
@@ -151,7 +192,7 @@ def parse_chapters():
 
 
 H1 = ParagraphStyle("H1", fontName=FONT, fontSize=17, leading=22, spaceAfter=8,
-                    textColor=HexColor("#c0392b"))
+                    textColor=ACCENT_HEX)
 H2 = ParagraphStyle("H2", fontName=FONT, fontSize=11.5, leading=15, spaceBefore=8,
                     spaceAfter=3, textColor=HexColor("#1a1a1a"))
 META = ParagraphStyle("META", fontName=FONT, fontSize=7.8, leading=11,
@@ -161,9 +202,9 @@ INTRO = ParagraphStyle("INTRO", fontName=FONT, fontSize=9.3, leading=14,
 BODY = ParagraphStyle("BODY", fontName=FONT, fontSize=9.5, leading=14,
                       spaceAfter=2, alignment=TA_LEFT)
 NOTE = ParagraphStyle("NOTE", fontName=FONT, fontSize=8.8, leading=12.5,
-                      textColor=HexColor("#8a6d1b"), spaceAfter=2)
+                      textColor=HexColor(NOTE_C), spaceAfter=2)
 COVER_T = ParagraphStyle("COVER_T", fontName=FONT, fontSize=26, leading=32,
-                         alignment=TA_CENTER, textColor=HexColor("#c0392b"))
+                         alignment=TA_CENTER, textColor=ACCENT_HEX)
 COVER_S = ParagraphStyle("COVER_S", fontName=FONT, fontSize=13, leading=20,
                          alignment=TA_CENTER, textColor=HexColor("#444444"))
 COVER_F = ParagraphStyle("COVER_F", fontName=FONT, fontSize=10, leading=16,
@@ -203,7 +244,7 @@ def build():
 
     # 版权声明页
     story.append(Paragraph("版权声明", H1))
-    story.append(HRFlowable(width="100%", color=HexColor("#c0392b"), thickness=1, spaceAfter=8))
+    story.append(HRFlowable(width="100%", color=ACCENT_HEX, thickness=1, spaceAfter=8))
     for fl in read_copyright_flowables():
         story.append(fl)
     if PRINT_MODE:
@@ -213,7 +254,7 @@ def build():
 
     # 导读页
     story.append(Paragraph("导读 · 怎么读这本指南", H1))
-    story.append(HRFlowable(width="100%", color=HexColor("#c0392b"), thickness=1, spaceAfter=8))
+    story.append(HRFlowable(width="100%", color=ACCENT_HEX, thickness=1, spaceAfter=8))
     intro_items = [
         "这是一份循证投资手册。它不推荐任何具体产品，只把经过统计、研究与监管文件验证的「高性价比动作」列成一张可按图索骥的清单。每条都用同一套账本：花掉什么、换回什么、证据多硬、出处哪来。",
         "四个问题：① 花掉什么？钱、时间、毅力，还是本金的永久性损失？② 换回什么？长期真实回报、更低波动、税费节省，还是避开归零？③ 证据多硬？见下方证据等级。④ 出处哪来？只引期刊论文与官方文件，不引自媒体与营销号。",
@@ -226,7 +267,7 @@ def build():
     story.append(PageBreak())
 
     story.append(Paragraph("目录", H1))
-    story.append(HRFlowable(width="100%", color=HexColor("#c0392b"), thickness=1, spaceAfter=8))
+    story.append(HRFlowable(width="100%", color=ACCENT_HEX, thickness=1, spaceAfter=8))
     for num, title, intro, entries, items in chapters:
         cnt = "%d 条" % len(entries) if entries else "%d 项清单" % len(items)
         story.append(Paragraph("第%d章　%s　<span color='#999999'>（%s）</span>" % (num, inline(title), cnt), BODY))
@@ -244,12 +285,12 @@ def build():
             for k in FIELDS:
                 v = e["fields"].get(k)
                 if v:
-                    block.append(Paragraph("<font color='#c0392b'>%s：</font>%s" % (k, inline(v)), BODY))
+                    block.append(Paragraph(("<font color='" + ACCENT + "'>%s：</font>%s") % (k, inline(v)), BODY))
             story.append(KeepTogether(block))
             story.append(Spacer(1, 3))
         if items:
             story.append(Spacer(1, 4))
-            story.append(Paragraph("<font color='#c0392b'>以下动作性价比为负，出现一个划掉一个：</font>", BODY))
+            story.append(Paragraph(("<font color='" + ACCENT + "'>以下动作性价比为负，出现一个划掉一个：</font>"), BODY))
             for it in items:
                 story.append(Paragraph("· %s" % esc(it), BODY))
         story.append(PageBreak())

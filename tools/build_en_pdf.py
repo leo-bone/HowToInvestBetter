@@ -7,9 +7,10 @@ Parses en/book/*.md (English six-field edition) into a clean PDF ebook:
   HowToInvestBetter-en.pdf        (A4, on-screen / e-reader)
   HowToInvestBetter-en-print.pdf  (6x9 inch, KDP Paperback standard; --print)
 
-The CJK-capable font (STSong-Light, built into reportlab) is used throughout so
-that the original Chinese document titles preserved in "Sources" render without
-missing-glyph boxes.
+Songti SC (an embedded TrueType serif) is used throughout: it renders Latin text and
+also covers the Chinese document titles kept verbatim in the "Sources" fields.
+KDP print requires EVERY font to be embedded; the previous STSong-Light was an Adobe
+CID font that is only referenced, never embedded, so KDP's preflight rejected it.
 
 Usage:
   pip install reportlab
@@ -37,7 +38,7 @@ from reportlab.lib.colors import HexColor
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_LEFT
 from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.cidfonts import UnicodeCIDFont
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import (
     SimpleDocTemplate, Paragraph, Spacer, PageBreak, HRFlowable, KeepTogether, Image
 )
@@ -46,8 +47,47 @@ try:
 except Exception:
     _PILImage = None
 
-pdfmetrics.registerFont(UnicodeCIDFont("STSong-Light"))
-FONT = "STSong-Light"  # CJK-capable; also renders Latin glyphs
+# ---- Embedded CJK-capable font --------------------------------------------
+# Songti SC (serif): renders Latin body text and the Chinese titles in Sources.
+# fsType = 0x0008 (Editable) -> embedding and document redistribution permitted.
+# Subfonts inside the macOS collection: 6 = Songti SC Regular, 1 = Songti SC Bold.
+# (Index 0 Songti SC Black is fsType=0x0002 "no embedding" -> deliberately unused.)
+SONGTI_TTC = "/System/Library/Fonts/Supplemental/Songti.ttc"
+HEITI_TTC = "/System/Library/Fonts/STHeiti Light.ttc"      # fallback: sans
+PINGFANG_TTC = "/System/Library/Fonts/PingFang.ttc"        # fallback: PingFang SC
+
+
+def register_cjk_fonts():
+    """Register an embeddable font family; returning the body font name."""
+    if os.path.exists(SONGTI_TTC):
+        pdfmetrics.registerFont(TTFont("SongtiSC", SONGTI_TTC, subfontIndex=6))
+        pdfmetrics.registerFont(TTFont("SongtiSC-Bold", SONGTI_TTC, subfontIndex=1))
+        normal, bold = "SongtiSC", "SongtiSC-Bold"
+    elif os.path.exists(HEITI_TTC):
+        pdfmetrics.registerFont(TTFont("SongtiSC", HEITI_TTC, subfontIndex=1))
+        pdfmetrics.registerFont(TTFont("SongtiSC-Bold", HEITI_TTC, subfontIndex=1))
+        normal = bold = "SongtiSC"
+    elif os.path.exists(PINGFANG_TTC):
+        pdfmetrics.registerFont(TTFont("SongtiSC", PINGFANG_TTC, subfontIndex=2))
+        pdfmetrics.registerFont(TTFont("SongtiSC-Bold", PINGFANG_TTC, subfontIndex=5))
+        normal, bold = "SongtiSC", "SongtiSC-Bold"
+    else:
+        raise SystemExit("No embeddable CJK font found - cannot produce a KDP-compliant PDF")
+    pdfmetrics.registerFontFamily("SongtiSC", normal=normal, bold=bold,
+                                  italic=normal, boldItalic=bold)
+    # Keep the canvas default font embedded too, so base-14 Helvetica never leaks in.
+    from reportlab import rl_config
+    rl_config.canvas_basefontname = normal
+    return normal
+
+
+FONT = register_cjk_fonts()  # embedded serif: Latin + CJK
+# 纸书为黑白内页：把强调色降为灰阶（红字在黑白印刷下只会印成脏灰，且会让 PDF 里带彩色
+# 内容，KDP 会给出"含彩色内容"提示）。A4／网页／电子书版仍保留红色标题。
+ACCENT = "#333333" if PRINT_MODE else "#c0392b"
+NOTE_C = "#555555" if PRINT_MODE else "#8a6d1b"
+ACCENT_HEX = HexColor(ACCENT)
+
 
 TITLE = "A High-Value Investment Guidebook"
 SUB = "What it costs, what it returns, how strong the evidence is"
@@ -149,7 +189,7 @@ def parse_chapters():
 
 
 H1 = ParagraphStyle("H1", fontName=FONT, fontSize=17, leading=22, spaceAfter=8,
-                    textColor=HexColor("#c0392b"))
+                    textColor=ACCENT_HEX)
 H2 = ParagraphStyle("H2", fontName=FONT, fontSize=11.5, leading=15, spaceBefore=8,
                     spaceAfter=3, textColor=HexColor("#1a1a1a"))
 META = ParagraphStyle("META", fontName=FONT, fontSize=7.8, leading=11,
@@ -159,9 +199,9 @@ INTRO = ParagraphStyle("INTRO", fontName=FONT, fontSize=9.3, leading=14,
 BODY = ParagraphStyle("BODY", fontName=FONT, fontSize=9.5, leading=14,
                       spaceAfter=2, alignment=TA_LEFT)
 NOTE = ParagraphStyle("NOTE", fontName=FONT, fontSize=8.8, leading=12.5,
-                      textColor=HexColor("#8a6d1b"), spaceAfter=2)
+                      textColor=HexColor(NOTE_C), spaceAfter=2)
 COVER_T = ParagraphStyle("COVER_T", fontName=FONT, fontSize=24, leading=30,
-                         alignment=TA_CENTER, textColor=HexColor("#c0392b"))
+                         alignment=TA_CENTER, textColor=ACCENT_HEX)
 COVER_S = ParagraphStyle("COVER_S", fontName=FONT, fontSize=13, leading=20,
                          alignment=TA_CENTER, textColor=HexColor("#444444"))
 COVER_F = ParagraphStyle("COVER_F", fontName=FONT, fontSize=10, leading=16,
@@ -202,7 +242,7 @@ def build():
 
     # --- License page ---
     story.append(Paragraph("License &amp; Disclaimer", H1))
-    story.append(HRFlowable(width="100%", color=HexColor("#c0392b"), thickness=1, spaceAfter=8))
+    story.append(HRFlowable(width="100%", color=ACCENT_HEX, thickness=1, spaceAfter=8))
     license_lines = [
         "This guidebook is an independently authored, evidence-based methodology handbook. All content is provided for educational and reference purposes only and does not constitute investment advice, an offer, or a solicitation from any institution or individual. Markets carry risk; decisions require independent judgment and consultation with a licensed professional.",
         "This guidebook is an independently authored, evidence-based methodology handbook and is not investment advice from any institution or individual. All citations follow each organization's latest official releases. Markets carry risk; decisions require independent judgment and consultation with a licensed professional.",
@@ -217,7 +257,7 @@ def build():
 
     # --- Introduction page ---
     story.append(Paragraph("Introduction · How to Read This Guidebook", H1))
-    story.append(HRFlowable(width="100%", color=HexColor("#c0392b"), thickness=1, spaceAfter=8))
+    story.append(HRFlowable(width="100%", color=ACCENT_HEX, thickness=1, spaceAfter=8))
     intro_items = [
         "This is an evidence-based investment handbook. It recommends no specific product; it simply lists high-value moves validated by statistics, research, and regulatory documents, arranged as a checklist you can follow entry by entry. Every entry uses the same ledger: what it costs, what it returns, how strong the evidence is, and where the sources come from.",
         "Four questions: 1) What does it cost? Money, time, willpower, or a permanent loss of principal? 2) What does it return? Long-term real return, lower volatility, tax & fee savings, or avoidance of total loss? 3) How strong is the evidence? See the grades below. 4) Where do the sources come from? Only journal papers and official documents — never self-media or marketing.",
@@ -231,7 +271,7 @@ def build():
 
     # --- Table of contents ---
     story.append(Paragraph("Contents", H1))
-    story.append(HRFlowable(width="100%", color=HexColor("#c0392b"), thickness=1, spaceAfter=8))
+    story.append(HRFlowable(width="100%", color=ACCENT_HEX, thickness=1, spaceAfter=8))
     for num, title, intro, entries, items in chapters:
         cnt = "%d entries" % len(entries) if entries else "%d-item list" % len(items)
         story.append(Paragraph("Chapter %d  %s  <font color='#999999'>(%s)</font>" % (num, inline(title), cnt), BODY))
@@ -252,12 +292,12 @@ def build():
             for k in FIELDS:
                 v = e["fields"].get(k)
                 if v:
-                    block.append(Paragraph("<font color='#c0392b'>%s:</font> %s" % (esc(k), inline(v)), BODY))
+                    block.append(Paragraph(("<font color='" + ACCENT + "'>%s:</font> %s") % (esc(k), inline(v)), BODY))
             story.append(KeepTogether(block))
             story.append(Spacer(1, 3))
         if items:
             story.append(Spacer(1, 4))
-            story.append(Paragraph("<font color='#c0392b'>Negative-value moves — cross one off as it appears:</font>", BODY))
+            story.append(Paragraph(("<font color='" + ACCENT + "'>Negative-value moves — cross one off as it appears:</font>"), BODY))
             for it in items:
                 story.append(Paragraph("· %s" % esc(it), BODY))
         story.append(PageBreak())
