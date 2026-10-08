@@ -17,12 +17,13 @@ An **evidence-based investment handbook** — 24 chapters, 302 entries. Every re
 
 | | |
 |---|---|
-| **English edition (full translation)** | [Online search page](https://leo-bone.github.io/HowToInvestBetter/en/) · [Offline single-file HTML](https://leo-bone.github.io/HowToInvestBetter/en/offline.html) · [EPUB](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter-en.epub) · [PDF](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter-en.pdf) · [Print PDF 6×9 (for KDP paperback)](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter-en-print.pdf) |
+| **English edition (full translation)** | [Online search page](https://leo-bone.github.io/HowToInvestBetter/en/) · [Offline single-file HTML](https://leo-bone.github.io/HowToInvestBetter/en/offline.html) · [EPUB](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter-en.epub) · [PDF](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter-en.pdf) · [Print PDF 6×9 (for KDP paperback)](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter-en-print.pdf) · [eBook cover](https://github.com/leo-bone/HowToInvestBetter/raw/main/cover-book-en.png) · [Paperback wrap](https://github.com/leo-bone/HowToInvestBetter/raw/main/cover-paperback-en.pdf) |
 | **Chinese edition** | [PDF](../HowToInvestBetter.pdf) · [EPUB](../HowToInvestBetter.epub) · [Offline HTML](https://leo-bone.github.io/HowToInvestBetter/offline.html) |
 | **Browse** | [English online search](https://leo-bone.github.io/HowToInvestBetter/en/) · [Contents](#contents) · [Evidence grading](#evidence) · [Build your own copy](#build-your-own-copy) |
 | **Long read** | [Full-book introduction](../GUIDE.md) (why this book was written / the Three-Zeros principle / the evidence system / chapter map) |
 | **Source content** | The Markdown files under [`en/book/`](../en/book/), readable online directly and also the data source for the English search page |
 | **Other languages** | [English](README.en.md) · [Русский](README.ru.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Tiếng Việt](README.vi.md) |
+| **Publishing (Amazon KDP)** | English Edition field sheet [`KDP-英文版填报表.md`](../KDP-英文版填报表.md) (copy-paste title / subtitle / description / keywords / categories / pricing + upload assets) · step-by-step upload guide [`KDP-上传操作指南.md`](../KDP-上传操作指南.md) · strategy & competitor analysis [`AMAZON-上架方案.md`](../AMAZON-上架方案.md) |
 
 ---
 
@@ -132,7 +133,14 @@ python3 tools/build_en_pdf.py            # -> HowToInvestBetter-en.pdf (A4)
 python3 tools/build_en_pdf.py --print   # -> HowToInvestBetter-en-print.pdf (6x9, KDP paperback)
 ```
 
-The Chinese edition has its own `tools/build.py`, `tools/build_epub.py`, `tools/build_pdf.py`.
+**Generate the English KDP covers** (eBook cover, paperback full wrap, social card):
+
+```
+pip install pillow
+python3 tools/gen_cover_en.py           # -> cover-book-en.png, cover-paperback-en.pdf/.png, en-cover.png
+```
+
+The paperback spine is computed from the interior page count, so re-run `gen_cover_en.py` whenever the page count changes. The Chinese edition has its own `tools/build.py`, `tools/build_epub.py`, `tools/build_pdf.py`, `tools/gen_cover.py`, `tools/gen_cover_paperback.py`.
 
 <a id="evidence"></a>
 ## How Evidence Is Graded

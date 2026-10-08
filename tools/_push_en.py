@@ -56,10 +56,12 @@ def main():
     porcelain.add(repo, files)
     print("[ok] staged %d files" % len(files), flush=True)
 
-    msg = ("英文版全量翻译上线：en/ 24 章 302 条（同结构/同循证分级/同标签/同交叉引用）；"
-           "英文检索页 en/index.html + en/offline.html；新增 tools/build_en.py / build_en_epub.py / "
-           "build_en_pdf.py 生成英文 EPUB/PDF（A4 与 6x9 印刷级，供 KDP 上架 Amazon.com）；"
-           "README 与 i18n/README.en.md 接入英文版入口。EN lint 0 问题，证据等级 A136/B106/C60 与中文一致。")
+    msg = ("英文版 KDP 出版物料就绪：新增 tools/gen_cover_en.py 生成英文电子书封面 "
+           "cover-book-en.png(1600x2560)、纸书完整书封 cover-paperback-en.pdf/.png"
+           "(366 页书脊 0.8242\"，全封面 13.0742\"x9.2500\"，含出血/条码区)、社交卡 en-cover.png；"
+           "EPUB 改为内嵌真实封面图（EPUB3 properties=cover-image + Kindle <meta name=cover>）；"
+           "新增 KDP-英文版填报表.md（书名/副标题/描述/关键词/分类/定价/上传资产/印刷参数，复制即用）；"
+           "README 与 i18n/README.en.md 接入英文封面与英文出版入口。")
     porcelain.commit(repo, message=msg.encode("utf-8"),
                      author=b"leo-bone <57990177@qq.com>",
                      committer=b"leo-bone <57990177@qq.com>")

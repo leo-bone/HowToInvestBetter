@@ -154,12 +154,8 @@ b{color:#c0392b;}
 
 COVER = """<?xml version="1.0" encoding="utf-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head><title>%s</title></head>
-<body style="text-align:center;padding-top:4em;">
-<h1 style="font-size:2em;color:#c0392b;">%s</h1>
-<p style="font-size:1.1em;">%s</p>
-<p style="color:#777;">Open source · CC BY 4.0</p>
-</body></html>""" % (esc(TITLE), esc(TITLE), esc(SUB))
+<head><title>%s</title><style>html,body{margin:0;padding:0;}body{text-align:center;}img{max-width:100%%;height:auto;}</style></head>
+<body><img src="images/cover.png" alt="%s"/></body></html>""" % (esc(TITLE), esc(TITLE))
 
 
 def preface_xhtml():
@@ -205,6 +201,7 @@ def build():
     opf_items, ncx_points, xhtml_files = [], [], []
     xhtml_files.append(("cover.xhtml", COVER))
     opf_items.append('<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/>')
+    opf_items.append('<item id="cover-image" href="images/cover.png" media-type="image/png" properties="cover-image"/>')
     ncx_points.append('<navPoint id="np-cover" playOrder="1"><navLabel><text>Cover</text></navLabel><content src="cover.xhtml"/></navPoint>')
 
     xhtml_files.append(("license.xhtml", license_xhtml()))
@@ -236,6 +233,7 @@ def build():
     <dc:language>en</dc:language>
     <dc:date>%s</dc:date>
     <meta property="dcterms:modified">%sT00:00:00Z</meta>
+    <meta name="cover" content="cover-image"/>
   </metadata>
   <manifest>
     <item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>
@@ -280,6 +278,12 @@ def build():
         z.writestr("OEBPS/nav.xhtml", nav)
         z.writestr("OEBPS/toc.ncx", ncx)
         z.writestr("OEBPS/styles.css", CSS)
+        cover_png = os.path.join(ROOT, "cover-book-en.png")
+        if os.path.exists(cover_png):
+            with open(cover_png, "rb") as f:
+                z.writestr("OEBPS/images/cover.png", f.read())
+        else:
+            print("[warn] cover-book-en.png missing; run tools/gen_cover_en.py first")
         for fn, content in xhtml_files:
             z.writestr("OEBPS/" + fn, content)
 

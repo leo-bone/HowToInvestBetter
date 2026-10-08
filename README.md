@@ -18,12 +18,12 @@
 | | |
 |---|---|
 | **下载** | [PDF](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter.pdf) · [EPUB](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter.epub) · [离线单文件 HTML](https://leo-bone.github.io/HowToInvestBetter/offline.html) · [印刷级 PDF（6×9，纸书投稿用）](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter-print.pdf) |
-| **英文版 English** | [在线检索页](https://leo-bone.github.io/HowToInvestBetter/en/) · [离线 HTML](https://leo-bone.github.io/HowToInvestBetter/en/offline.html) · [EPUB](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter-en.epub) · [PDF](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter-en.pdf) · [印刷级 PDF 6×9（KDP 纸书投稿用）](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter-en-print.pdf) |
+| **英文版 English** | [在线检索页](https://leo-bone.github.io/HowToInvestBetter/en/) · [离线 HTML](https://leo-bone.github.io/HowToInvestBetter/en/offline.html) · [EPUB](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter-en.epub) · [PDF](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter-en.pdf) · [印刷级 PDF 6×9（KDP 纸书投稿用）](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter-en-print.pdf) · [电子书封面](https://github.com/leo-bone/HowToInvestBetter/raw/main/cover-book-en.png) · [纸书完整书封](https://github.com/leo-bone/HowToInvestBetter/raw/main/cover-paperback-en.pdf) |
 | **查阅** | [在线检索页](https://leo-bone.github.io/HowToInvestBetter/) · [目录](#目录) · [证据分级说明](#证据分级说明) · [构建与校验](#自己跑一份) |
 | **长文** | [全书导读](GUIDE.md)（为什么写这本书／三零原则／证据体系／章节地图） |
 | **正文源文件** | [`book/`](book/) 下的 Markdown，可在线直接读，也是检索页的数据源 |
 | **其他语言** | [English](i18n/README.en.md) · [Русский](i18n/README.ru.md) · [Español](i18n/README.es.md) · [Português](i18n/README.pt.md) · [Deutsch](i18n/README.de.md) · [Tiếng Việt](i18n/README.vi.md) |
-| **出版** | [亚马逊 KDP 上架方案](AMAZON-上架方案.md)（竞品分析 · 格式清单 · 行动步骤）· [KDP 上传操作指南](KDP-上传操作指南.md)（逐屏照抄字段）· [KDP 账户找回指南](KDP-账户找回指南.md)（密码/手机号忘了如何找回）· [KDP 中文版填报表](KDP-中文版填报表.md)（复制即用）· 版权声明见 [版权声明](版权声明.md)（CC BY 4.0，沿用《高性价比人生指南》方法论并署名） |
+| **出版** | [亚马逊 KDP 上架方案](AMAZON-上架方案.md)（竞品分析 · 格式清单 · 行动步骤）· [KDP 上传操作指南](KDP-上传操作指南.md)（逐屏照抄字段）· [KDP 账户找回指南](KDP-账户找回指南.md)（密码/手机号忘了如何找回）· [KDP 中文版填报表](KDP-中文版填报表.md)（复制即用）· [KDP 英文版填报表](KDP-英文版填报表.md)（English Edition，打开 Amazon.com 最大市场）· 版权声明见 [版权声明](版权声明.md)（CC BY 4.0，沿用《高性价比人生指南》方法论并署名） |
 
 ---
 
