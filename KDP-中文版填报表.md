@@ -32,17 +32,25 @@
 ## 上传资产清单（仓库内已生成）
 
 - 电子书：`HowToInvestBetter.epub`（已含封面 + 版权页 + 导读 + 带导航目录）
-- 纸书内文：`HowToInvestBetter-print.pdf`（6×9 英寸，已含页码／版权页／ISBN 占位）
-- 封面图：`cover-book.png`（1600×2560 竖版，电子书直接传；纸书需补书脊+封底做成完整书封）
+- 纸书内文：`HowToInvestBetter-print.pdf`（6×9 英寸，338 页，已含页码／版权页／ISBN 占位）
+- 电子书封面图：`cover-book.png`（1600×2560 竖版）
+- **纸书完整书封**：`cover-paperback.pdf`（300 DPI，KDP 首选上传格式）或 `cover-paperback.png`
 
-## 纸书待补（否则只能先上电子书）
+## 纸书书封（已生成，可直接上传）
 
-- **完整书封**（封面 + 书脊 + 封底，含 0.125″ 出血）——目前只有封面图 `cover-book.png`
+下单用 **白纸（White，黑白印刷）**，与下面参数一致；若改用米色纸须重算书脊。
+
+- 开本 6×9 英寸 · 页数 338 · **书脊 0.7612″**（= 338 × 0.002252″）
+- 全封面尺寸 **13.0112″ × 9.2500″**（300 DPI，含四边 0.125″ 出血）
+- 版式符合 KDP 规范：**封底（左）｜书脊（中）｜封面（右）**
+- **条码区**已按 KDP 要求在**封底右下角**预留 2″×1.2″ 空白（条码由 KDP 自动添加）
+- 边框 / 文字均在裁切线内 0.3″ 安全区，避免裁切与折页偏移时被切
+- 重新生成：`python3 tools/gen_cover_paperback.py`（换纸张加 `--cream`，换页数加 `--pages N`）
 
 ## 上架步骤（中文版）
 
 1. 注册**国际 KDP 账户（美站）** amazon.com/kdp：绑定 Payoneer / WorldFirst 境外银行卡，填 **W-8BEN**（避免 30% 预扣税），绑国际信用卡。审核约 7–10 天。
 2. 新建「**Kindle 电子书**」：填上方书名／作者／描述／关键词／分类，上传 `HowToInvestBetter.epub` + `cover-book.png`，预览无误后发布（约 48 小时上线 Amazon.com）。
-3. 可选新建「**平装书（Paperback）**」：上传 `HowToInvestBetter-print.pdf` + 完整书封，填 ISBN（可向 KDP 免费申请），发布。
+3. 可选新建「**平装书（Paperback）**」：上传 `HowToInvestBetter-print.pdf`（内文）+ `cover-paperback.pdf`（完整书封），纸张选**白纸**，填 ISBN（可向 KDP 免费申请），发布。注意：若更换内文页数或纸张，必须重跑 `tools/gen_cover_paperback.py` 重算书脊。
 4. 定价 $3.99，确认处于 70% 版税区间。
 5. 上线后用 GitHub Pages（leo-bone.github.io/HowToInvestBetter）+ 6 语言 README 导流。

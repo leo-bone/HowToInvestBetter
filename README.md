@@ -142,7 +142,14 @@ python3 tools/build_pdf.py
 python3 tools/gen_cover.py
 ```
 
-会生成 `cover.png`（1200×630），用于社交分享卡片与电子书封面。需 `Pillow`。
+会生成 `cover.png`（1200×630），用于社交分享卡片。需 `Pillow`。
+
+**生成电子书/纸书封面**：
+
+```
+python3 tools/gen_cover_kdp.py        # cover-book.png（1600×2560 竖版，电子书用）
+python3 tools/gen_cover_paperback.py  # cover-paperback.png/.pdf（纸书完整书封，自动按页数算书脊）
+```
 
 **一键推送到 GitHub**（本机系统 `git` 不可用时）：
 
