@@ -2,7 +2,7 @@
 
 The original book called this "subtract first." The moves below have negative cost-performance—cross each one off as it appears. They aren't advice; they're prohibitions. Each corresponds to a specific argument in an earlier chapter; the entry numbers in parentheses let you trace back why.
 
-- Concentrated holdings in one or two stocks / one industry — a single-point black swan can zero out your net worth; diversify across 20–30 stocks in different industries to eliminate about 90% of single-stock risk (see Entry 2, Chapter 1, Entry 2).
+- Concentrated holdings in one or two stocks / one industry — a single-point black swan can zero out your net worth; diversify across 20–30 stocks in different industries to eliminate about 90% of single-stock risk (see Chapter 1, Entry 2).
 - Any form of high leverage (including off-exchange margin financing) — without leverage a 50% drop still leaves you at the table; with leverage you may already be force-liquidated out, selling at the very bottom (see Chapter 1, Entry 3, Entry 6, Chapter 24).
 - Trading frequently every month, treating funds like stocks — SSE data on 53.4 million accounts shows frequent traders have the highest loss probability; annual turnover above 300% can eat 15%–18% of principal in costs (see Chapter 3, Chapter 12).
 - Paying to join stock-tip groups / "teacher-led" trades — unlicensed stock tipping is illegal; charging to lead trades = taking your money first, then using you as liquidity (see Chapter 1, Entry 13, Chapter 6, Entry 2).

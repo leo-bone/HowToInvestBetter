@@ -56,10 +56,13 @@ def main():
     porcelain.add(repo, files)
     print("[ok] staged %d files" % len(files), flush=True)
 
-    msg = ("英文版 KDP 推广包：新增 KDP-英文版上线推广包.md（作者样书验收清单 + 最终 Amazon HTML "
-           "描述含 GitHub 引流段 + X/Reddit/Newsletter 英文首发文案 + 上线后 30 天节奏）；"
-           "KDP-英文版填报表.md 描述升级为最终 HTML 版并指向推广包；en/index.html 与 en/offline.html "
-           "加 Amazon 搜索入口（免费全文→付费便携版导流闭环）；重跑 build_en.py 确认 0 lint。")
+    msg = ("上架前四视角全面体检与修订（作者/编辑/专家/读者）：修复 5 处事实与数学硬伤"
+           "（12章本金口径10万→100万、21章费率侵蚀18%→8%–9%、08章个人养老金30年账户68.7万→94.9万及节税"
+           "2000→2400/净省1640→2040、02章基金分红税务误述改用财税〔2002〕128号、02章尾随佣金4.7万→4.0万、"
+           "02章月换手摩擦0.9%→1.1%、05章REITs「跑赢」→与标普相当、12章6.5→7个百分点、05章SPIVA链接改美国版）；"
+           "移除24章叩富网个人博客与百度百科等非权威来源；软化「只引官文」绝对化承诺为「以官文/监管/同行评审为主、"
+           "少数背景辅以权威媒体」并同步 GUIDE/README/index/en；英文版修 broken 交叉引用、per-ten-thousand→bps、"
+           "fee erosion→fee drag、active fund→actively managed fund 等术语统一。两版 QA/lint 0 问题，重建 EPUB/PDF。")
     porcelain.commit(repo, message=msg.encode("utf-8"),
                      author=b"leo-bone <57990177@qq.com>",
                      committer=b"leo-bone <57990177@qq.com>")
