@@ -18,6 +18,7 @@
 | | |
 |---|---|
 | **下载** | [PDF](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter.pdf) · [EPUB](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter.epub) · [离线单文件 HTML](https://leo-bone.github.io/HowToInvestBetter/offline.html) · [印刷级 PDF（6×9，纸书投稿用）](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter-print.pdf) |
+| **英文版 English** | [在线检索页](https://leo-bone.github.io/HowToInvestBetter/en/) · [离线 HTML](https://leo-bone.github.io/HowToInvestBetter/en/offline.html) · [EPUB](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter-en.epub) · [PDF](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter-en.pdf) · [印刷级 PDF 6×9（KDP 纸书投稿用）](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter-en-print.pdf) |
 | **查阅** | [在线检索页](https://leo-bone.github.io/HowToInvestBetter/) · [目录](#目录) · [证据分级说明](#证据分级说明) · [构建与校验](#自己跑一份) |
 | **长文** | [全书导读](GUIDE.md)（为什么写这本书／三零原则／证据体系／章节地图） |
 | **正文源文件** | [`book/`](book/) 下的 Markdown，可在线直接读，也是检索页的数据源 |
@@ -136,6 +137,17 @@ python3 tools/build_pdf.py
 
 会用系统内置 CJK 字体生成 `HowToInvestBetter.pdf`（封面 + 导读 + 目录 + 分章 + 页脚页码）。`reportlab` 仅构建时安装，读者打开 PDF 无需任何依赖。
 
+**生成英文版 EPUB / PDF（上架 Amazon.com / KDP 用）**：英文正文在 `en/book/`，与中文同结构、同循证分级。改了 `en/book/` 后重新生成：
+
+```
+python3 tools/build_en.py          # 重新生成 en/data.js 与 en/offline.html（含字段/lint 校验）
+python3 tools/build_en_epub.py     # 英文 EPUB：HowToInvestBetter-en.epub
+python3 tools/build_en_pdf.py      # 英文 PDF（A4）：HowToInvestBetter-en.pdf
+python3 tools/build_en_pdf.py --print   # 英文印刷级 PDF（6×9，KDP 纸书）：HowToInvestBetter-en-print.pdf
+```
+
+英文版 lint 规则与中文一致（字段完整、标签键合法、证据等级 A/B/C、不得残留"第X条"中文引用）；`build_en.py` 仅依赖标准库，EPUB 同理，PDF 需要 `reportlab`。英文封面默认使用纯文字封面（不套用中文封面图）。
+
 **生成分享封面图**：
 
 ```
@@ -188,7 +200,7 @@ python3 tools/lint.py
 | Deutsch | [i18n/README.de.md](i18n/README.de.md) | 完整 |
 | Tiếng Việt | [i18n/README.vi.md](i18n/README.vi.md) | 完整 |
 
-正文（`book/`）目前为中文，多语言正文翻译欢迎按语种认领并提交 PR。术语对照见 [i18n/GLOSSARY.md](i18n/GLOSSARY.md)。
+正文（`book/`）目前为中文。**英文版已完整翻译（24 章 / 302 条，同结构、同循证分级、同标签体系、同交叉引用），正文位于 [`en/book/`](en/book/)，配套英文检索页 [`en/index.html`](en/index.html) 与英文构建脚本 `tools/build_en*.py`**，供上架 Amazon.com（KDP）等英文市场使用。其余语种（Русский / Español / Português / Deutsch / Tiếng Việt）目前仅有语言导航页，多语言正文翻译欢迎按语种认领并提交 PR。术语对照见 [i18n/GLOSSARY.md](i18n/GLOSSARY.md)。
 
 ## 许可
 

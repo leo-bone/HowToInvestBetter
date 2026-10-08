@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HowToInvestBetter · Evidence-Based Investing Guide</title>
+<meta name="description" content="An evidence-based investing handbook: every entry states what it costs, what it returns, and how strong the evidence is—citing only academic papers and official documents. Filter by keyword, chapter, evidence grade, or cost dimensions.">
+<meta property="og:title" content="HowToInvestBetter · Evidence-Based Investing Guide">
+<meta property="og:description" content="An evidence-based investing handbook with 300+ debatable entries—each stating cost, payoff, and evidence grade, citing only journals and official documents.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://leo-bone.github.io/HowToInvestBetter/en/">
+<meta property="og:image" content="https://leo-bone.github.io/HowToInvestBetter/cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HowToInvestBetter · Evidence-Based Investing Guide">
+<meta name="twitter:description" content="300+ debatable investing entries, citing only journals and official documents.">
+<meta name="twitter:image" content="https://leo-bone.github.io/HowToInvestBetter/cover.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230f1b2d'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='%232f9e44' font-family='sans-serif'%3E%C2%A5%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --ink:#1f2933; --sub:#52606d; --line:#e4e7eb; --bg:#fbfbfa;
+    --card:#fff; --a:#0b7285; --b:#9c6f19; --c:#64748b; --zero:#2f9e44;
+    --warn:#c92a2a; --warnbg:#fff5f5;
+    --tagA:#e3fafc; --tagB:#fff4e6; --tagC:#f1f5f9;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    line-height:1.7;font-size:15px;}
+  .wrap{max-width:980px;margin:0 auto;padding:26px 20px 100px;}
+  h1{font-size:26px;margin:0 0 4px;}
+  .lede{color:var(--sub);font-size:14px;margin:0 0 8px;}
+  .badges{font-size:12px;color:var(--sub);margin:6px 0 14px;}
+  .badges span{display:inline-block;background:#fff;border:1px solid var(--line);
+    border-radius:20px;padding:2px 10px;margin:0 6px 6px 0;}
+  .langs{font-size:12.5px;color:var(--sub);margin:2px 0 12px;}
+  .langs a{color:var(--a);text-decoration:none;border-bottom:1px dotted var(--a);}
+  .langs a:hover{border-bottom-style:solid;}
+  .langs .sep{color:var(--line);margin:0 4px;}
+  .guide{border:1px solid var(--line);border-radius:12px;background:#fff;margin:12px 0 8px;overflow:hidden;}
+  .guide>summary{cursor:pointer;padding:12px 16px;font-weight:700;font-size:14px;
+    list-style:none;background:#f8fafc;}
+  .guide>summary::-webkit-details-marker{display:none;}
+  .guide>summary:before{content:"▸ ";color:var(--zero);}
+  .guide[open]>summary:before{content:"▾ ";}
+  .guide .gb{padding:6px 18px 16px;font-size:14px;}
+  .guide ol{margin:8px 0;padding-left:22px;}
+  .guide ol li{margin:5px 0;}
+  .guide .legend{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px;}
+  .guide .lc{font-size:12px;padding:3px 10px;border-radius:20px;font-weight:700;}
+  .guide .lcA{background:var(--tagA);color:var(--a);}
+  .guide .lcB{background:var(--tagB);color:var(--b);}
+  .guide .lcC{background:var(--tagC);color:var(--c);}
+  .guide .lcZ{background:#ebfbee;color:var(--zero);border:1px solid #b2f2bb;}
+  .guide .tip{color:var(--sub);font-size:13px;margin:6px 0 0;}
+  .toolbar{position:sticky;top:0;background:rgba(251,251,250,.97);backdrop-filter:blur(6px);
+    border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:14px 0 8px;z-index:5;
+    display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .toolbar input[type=text]{padding:8px 11px;border:1px solid var(--line);border-radius:7px;font-size:14px;min-width:190px;flex:1;}
+  .group{display:flex;gap:4px;flex-wrap:wrap;align-items:center;}
+  .group .gl{font-size:11px;color:var(--sub);margin-right:2px;}
+  .btn{border:1px solid var(--line);background:#fff;border-radius:7px;padding:6px 10px;font-size:13px;cursor:pointer;color:var(--sub);}
+  .btn.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .btn.zero.on{background:var(--zero);border-color:var(--zero);}
+  select{padding:7px 9px;border:1px solid var(--line);border-radius:7px;font-size:13px;background:#fff;color:var(--sub);}
+  .stat{font-size:12.5px;color:var(--sub);margin:6px 0 14px;}
+  .ch-head{font-size:19px;margin:30px 0 6px;padding-top:14px;border-top:2px solid var(--line);}
+  .ch-sub{font-size:13px;color:var(--sub);margin:0 0 10px;}
+  .ch-intro{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:0 0 14px;font-size:13.5px;color:#334155;}
+  .ch-intro b{color:var(--ink);}
+  .ch-intro a.ref{color:var(--a);cursor:pointer;text-decoration:underline dotted;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:13px 16px;margin:11px 0;
+    box-shadow:0 1px 2px rgba(15,23,42,.03);scroll-margin-top:120px;}
+  .card.flash{outline:3px solid var(--zero);outline-offset:2px;}
+  .head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:6px;}
+  .id{color:var(--sub);font-weight:700;font-size:13px;}
+  .card h3{font-size:16px;margin:0;flex:1;min-width:200px;}
+  .tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;}
+  .tA{background:var(--tagA);color:var(--a);} .tB{background:var(--tagB);color:var(--b);} .tC{background:var(--tagC);color:var(--c);}
+  .imp{background:#f8fafc;color:#475569;font-size:11px;padding:2px 8px;border-radius:20px;border:1px solid var(--line);}
+  .cz{background:#ebfbee;color:var(--zero);font-size:11px;padding:2px 8px;border-radius:20px;border:1px solid #b2f2bb;font-weight:700;}
+  .cost{font-size:11px;color:#475569;background:#f8fafc;border:1px solid var(--line);padding:2px 7px;border-radius:20px;}
+  .cost.no{color:var(--zero);border-color:#b2f2bb;background:#ebfbee;}
+  .cost.big{color:#c92a2a;border-color:#ffc9c9;background:#fff5f5;}
+  .row{display:grid;grid-template-columns:54px 1fr;gap:6px;margin:4px 0;font-size:13.5px;}
+  .row .k{color:var(--sub);font-weight:600;}
+  .plain{background:#f8fafc;border-radius:8px;padding:8px 12px;margin-top:7px;font-size:13.5px;color:#334155;}
+  .plain b{color:var(--ink);}
+  .note{background:var(--warnbg);border:1px solid #ffc9c9;border-radius:8px;padding:7px 11px;margin-top:7px;font-size:13px;color:#a61e4d;}
+  .neglist{columns:2;column-gap:26px;font-size:14px;margin:0;padding-left:20px;}
+  .neglist li{margin:6px 0;break-inside:avoid;}
+  a.ref{color:var(--a);cursor:pointer;text-decoration:underline dotted;}
+  .foot{margin-top:46px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-size:12px;}
+  .empty{color:var(--sub);text-align:center;padding:40px 0;font-size:14px;}
+  .togglehint{font-size:12px;color:var(--sub);margin-top:4px;}
+  .acts{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;}
+  .copy,.share{font-size:11px;color:var(--a);cursor:pointer;user-select:none;border:1px solid var(--line);
+    border-radius:20px;padding:1px 8px;}
+  .copy:hover,.share:hover{background:#e3fafc;}
+  .share{color:var(--zero);}
+  .toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:var(--ink);color:#fff;
+    padding:8px 16px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:20;}
+  .toast.show{opacity:.95;}
+  @media(max-width:640px){.neglist{columns:1;}}
+
+  .reftip{position:relative;margin:10px 0 2px;padding:10px 30px 10px 12px;border:1px solid var(--a);
+    border-radius:9px;background:var(--tagA);font-size:13px;line-height:1.6;animation:rfin .18s ease;}
+  @keyframes rfin{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:none;}}
+  .reftip-h{font-weight:700;color:var(--a);margin-bottom:3px;}
+  .reftip-b{color:#0b3a44;}
+  .reftip-x{position:absolute;top:4px;right:6px;border:none;background:transparent;
+    color:var(--a);font-size:16px;line-height:1;cursor:pointer;}
+  .reftip-x:hover{color:var(--warn);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>HowToInvestBetter <span style="font-size:14px;color:var(--sub)">· Evidence-Based Investing Guide</span></h1>
+  <p class="lede">An evidence-based investing handbook: every entry states its <b>cost, payoff, evidence grade, and sources</b>, citing only academic papers and official documents. Each entry is tagged by cost (money / time / will / benefit) so you can filter and share.</p>
+  <p class="langs">Downloads: <a href="HowToInvestBetter.epub" download>EPUB</a><span class="sep">·</span><a href="HowToInvestBetter.pdf" download>PDF</a><span class="sep">·</span><a href="offline.html" download>Offline HTML</a><span class="sep">|</span><a href="https://github.com/leo-bone/HowToInvestBetter/blob/main/GUIDE.md">Reader's Guide (zh)</a><span class="sep">·</span><a href="https://github.com/leo-bone/HowToInvestBetter/blob/main/i18n/GLOSSARY.md">Glossary</a></p>
+  <p class="langs">Other languages: <a href="https://github.com/leo-bone/HowToInvestBetter/blob/main/i18n/README.en.md">English</a><span class="sep">·</span><a href="https://github.com/leo-bone/HowToInvestBetter/blob/main/i18n/README.ru.md">Русский</a><span class="sep">·</span><a href="https://github.com/leo-bone/HowToInvestBetter/blob/main/i18n/README.es.md">Español</a><span class="sep">·</span><a href="https://github.com/leo-bone/HowToInvestBetter/blob/main/i18n/README.pt.md">Português</a><span class="sep">·</span><a href="https://github.com/leo-bone/HowToInvestBetter/blob/main/i18n/README.de.md">Deutsch</a><span class="sep">·</span><a href="https://github.com/leo-bone/HowToInvestBetter/blob/main/i18n/README.vi.md">Tiếng Việt</a></p>
+  <div class="badges" id="badges"></div>
+
+  <details class="guide" open>
+    <summary>📖 30-Second Guide: How to use this handbook</summary>
+    <div class="gb">
+      <p>Every recommendation uses the same ledger. You only answer four questions:</p>
+      <ol>
+        <li><b>What does it cost?</b> Money, time, willpower, or <b>permanent loss of principal</b>?</li>
+        <li><b>What does it return?</b> Long-run real return, lower volatility, tax savings, or <b>avoiding going to zero</b>?</li>
+        <li><b>How strong is the evidence?</b> [A] authoritative stats / top journals / official docs ｜ [B] single studies / institutional reports ｜ [C] reasonable inference / regulations</li>
+        <li><b>Where is it from?</b> Only journals and official documents—no self-media or marketing accounts.</li>
+      </ol>
+      <div class="legend">
+        <span class="lc lcA">Evidence A · authoritative stats / top journals / official docs</span>
+        <span class="lc lcB">Evidence B · single studies / institutional reports</span>
+        <span class="lc lcC">Evidence C · reasonable inference / regulations</span>
+        <span class="lc lcZ">Three-Zero · money/time/will all cost 0—do these first, eyes closed</span>
+      </div>
+      <p class="tip">Usage: search by keyword at the top, filter by evidence grade and cost dimensions (money / time / will / benefit), or hit "Three-Zero Only" to dig out the highest cost-performance moves. Under any entry, "📋 Copy citation" copies the full source; "🔗 Copy link" sends just that entry to a friend.</p>
+    </div>
+  </details>
+
+  <div class="toolbar">
+    <input type="text" id="q" placeholder="Search: fees, leverage, Ponzi, index, gold…">
+    <div class="group"><span class="gl">Evidence</span>
+      <button class="btn ev on" data-ev="all">All</button>
+      <button class="btn ev" data-ev="A">A</button>
+      <button class="btn ev" data-ev="B">B</button>
+      <button class="btn ev" data-ev="C">C</button>
+    </div>
+    <div class="group"><span class="gl">Cost</span>
+      <select id="fM"><option value="all">Money·All</option><option value="0">Money·0</option><option value="little">Money·little</option><option value="mid">Money·mid</option><option value="high">Money·high</option></select>
+      <select id="fT"><option value="all">Time·All</option><option value="0">Time·0</option><option value="little">Time·little</option><option value="some">Time·some</option></select>
+      <select id="fW"><option value="all">Will·All</option><option value="no">Will·no</option><option value="some">Will·some</option><option value="much">Will·much</option></select>
+      <select id="fB"><option value="all">Benefit·All</option><option value="low">Benefit·low</option><option value="mid">Benefit·mid</option><option value="high">Benefit·high</option></select>
+    </div>
+    <button class="btn zero" id="zeroBtn">Three-Zero Only · Highest Cost-Performance</button>
+    <button class="btn" id="randBtn">Random</button>
+    <select id="sec"><option value="all">All Chapters</option></select>
+  </div>
+  <div class="togglehint">"Three-Zero" = money and time cost 0, willpower cost "no"—the highest cost-performance moves to do first, eyes closed.</div>
+  <div class="stat" id="stat"></div>
+
+  <div id="out"></div>
+
+  <div class="foot" id="foot"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script>
+(function(){
+  var D = window.BOOK_DATA || {chapters:[],entries:[],lists:[]};
+  var byId={}; D.entries.forEach(function(e){byId[e.chapter+'-'+e.num]=e;});
+  var ev='all', zero=false;
+  var fM='all', fT='all', fW='all', fB='all', sec='all';
+  var q='';
+
+  var secSel=document.getElementById('sec');
+  D.chapters.forEach(function(c){
+    var o=document.createElement('option');
+    o.value=c.num; o.textContent='Ch. '+c.num+' · '+c.title.replace(/^[IVXLCDM]+\.\s*/,'');
+    secSel.appendChild(o);
+  });
+
+  var g={A:0,B:0,C:0}; var tz=0;
+  D.entries.forEach(function(e){g[e.grade]=(g[e.grade]||0)+1; if(e.three_zero)tz++;});
+  document.getElementById('badges').innerHTML =
+    '<span>'+D.entries.length+' entries</span>'+
+    '<span>'+D.chapters.length+' chapters</span>'+
+    '<span>Grade A '+g.A+'</span><span>Grade B '+g.B+'</span><span>Grade C '+g.C+'</span>'+
+    '<span>Three-Zero '+tz+'</span>'+
+    '<span>Updated '+D.updated+'</span>'+
+    '<span>CC BY 4.0</span>';
+
+  function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  // Cross-reference to clickable links: "Chapter X, Entry Y" (cross-chapter),
+  // "Entry X" / "Entries X, Y, Z" (same chapter; multi-entry supported).
+  // Use placeholders to avoid nested matching.
+  function linkRefs(text, chap){
+    var refs=[];
+    text = text.replace(/Chapter\s+(\d+),\s*Entry\s+(\d+)/gi, function(_,c,n){
+      refs.push('<a class="ref" data-c="'+c+'" data-n="'+n+'">Chapter '+c+', Entry '+n+'</a>');
+      return '@@R'+(refs.length-1)+'@@';
+    });
+    text = text.replace(/\bEntries\s+(\d+(?:\s*,\s*\d+)*)/gi, function(_, nums){
+      var links = nums.split(/\s*,\s*/).map(function(x){
+        return '<a class="ref" data-c="'+chap+'" data-n="'+x+'">Entry '+x+'</a>';
+      });
+      refs.push(links.join(', '));
+      return '@@R'+(refs.length-1)+'@@';
+    });
+    text = text.replace(/\bEntry\s+(\d+)/gi, function(_, x){
+      refs.push('<a class="ref" data-c="'+chap+'" data-n="'+x+'">Entry '+x+'</a>');
+      return '@@R'+(refs.length-1)+'@@';
+    });
+    text = text.replace(/@@R(\d+)@@/g, function(_, i){ return refs[+i]; });
+    return text;
+  }
+  function linkify(s, chap){ return linkRefs(esc(s), chap); }
+  // Chapter intro light markdown: bold **x** + cross-reference links
+  function mdlight(s, chap){
+    var t = esc(s);
+    t = t.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+    return linkRefs(t, chap);
+  }
+  function chip(label,val){
+    var cls = (val==='0'||val==='no') ? 'cost no' : (val==='high'||val==='much'?'cost big':'cost');
+    return '<span class="'+cls+'">'+label+'·'+esc(val)+'</span>';
+  }
+
+  function pass(e){
+    if(ev!=='all' && e.grade!==ev) return false;
+    if(zero && !e.three_zero) return false;
+    if(fM!=='all' && e.cost_money!==fM) return false;
+    if(fT!=='all' && e.cost_time!==fT) return false;
+    if(fW!=='all' && e.cost_will!==fW) return false;
+    if(fB!=='all' && e.benefit!==fB) return false;
+    if(sec!=='all' && String(e.chapter)!==String(sec)) return false;
+    if(q){
+      var hay=(e.title+e.cost+e.gain+e.source+e.plain+e.note+e.impact).toLowerCase();
+      if(hay.indexOf(q)<0) return false;
+    }
+    return true;
+  }
+
+  function card(e){
+    var tags='<span class="tag t'+e.grade+'">Evidence '+e.grade+'</span>'+
+      chip('Money',e.cost_money)+chip('Time',e.cost_time)+chip('Will',e.cost_will)+
+      '<span class="imp">Benefit·'+esc(e.benefit)+'</span>';
+    if(e.impact) tags+='<span class="imp">Impact: '+esc(e.impact)+'</span>';
+    if(e.three_zero) tags+='<span class="cz">Three-Zero</span>';
+    var note = e.note ? '<div class="note"><b>Note:</b>'+linkify(e.note, e.chapter)+'</div>' : '';
+    return '<div class="card" id="e-'+e.chapter+'-'+e.num+'">'+
+      '<div class="head"><span class="id">Ch. '+e.chapter+', Entry '+e.num+'</span>'+
+        '<h3>'+esc(e.title)+'</h3>'+tags+'</div>'+
+      '<div class="row"><span class="k">Cost</span><span>'+linkify(e.cost, e.chapter)+'</span></div>'+
+      '<div class="plain"><b>In plain terms:</b>'+linkify(e.plain, e.chapter)+'</div>'+
+      '<div class="row"><span class="k">Payoff</span><span>'+linkify(e.gain, e.chapter)+'</span></div>'+
+      '<div class="row"><span class="k">Sources</span><span>'+esc(e.source)+'</span></div>'+
+      note+
+      '<div class="acts"><span class="copy" data-c="'+e.chapter+'" data-n="'+e.num+'">📋 Copy citation</span>'+
+      '<span class="share" data-c="'+e.chapter+'" data-n="'+e.num+'">🔗 Copy link</span></div></div>';
+  }
+
+  function render(){
+    var out=document.getElementById('out');
+    var html=''; var shown=0;
+    D.chapters.forEach(function(c){
+      if(sec!=='all' && String(c.num)!==String(sec)) return;
+      var cname='Ch. '+c.num+' · '+esc(c.title.replace(/^[IVXLCDM]+\.\s*/,''));
+      if(c.type==='list'){
+        var lst=D.lists.filter(function(l){return l.chapter===c.num;})[0];
+        if(!lst) return;
+        var items=lst.items.filter(function(it){
+          if(q){return it.toLowerCase().indexOf(q)>=0;} return true;
+        });
+        if(!items.length) return;
+        shown+=items.length;
+        html+='<h2 class="ch-head">'+cname+'</h2>'+
+          '<p class="ch-sub">Actions to simply not do (negative cost-performance)—cross out each as it appears.</p>'+
+          '<ul class="neglist">'+items.map(function(it){return '<li>❌ '+esc(it)+'</li>';}).join('')+'</ul>';
+        return;
+      }
+      var es=D.entries.filter(function(e){return e.chapter===c.num;});
+      var vis=es.filter(pass);
+      if(!vis.length) return;
+      shown+=vis.length;
+      var intro = (c.intro&&c.intro.length)
+        ? '<div class="ch-intro">'+c.intro.map(function(p){return mdlight(p, c.num);}).join(' ')+'</div>' : '';
+      html+='<h2 class="ch-head">'+cname+'</h2>'+intro+
+        '<p class="ch-sub">'+es.length+' entries in this chapter, showing '+vis.length+'.</p>'+
+        vis.map(card).join('');
+    });
+    if(!shown) html='<div class="empty">No matching entries—try relaxing the filters.</div>';
+    out.innerHTML=html;
+    document.getElementById('stat').textContent=
+      'Showing '+shown+' / '+D.entries.length+' entries ｜ Filters: '+
+      (ev==='all'?'All evidence':('Evidence '+ev))+
+      (zero?' +Three-Zero':'')+
+      (fM!=='all'?' +Money '+fM:'')+(fT!=='all'?' +Time '+fT:'')+(fW!=='all'?' +Will '+fW:'')+
+      (fB!=='all'?' +Benefit '+fB:'')+
+      (sec!=='all'?' +Ch. '+sec:'');
+  }
+
+  document.getElementById('q').addEventListener('input',function(){q=this.value.trim().toLowerCase();render();});
+  document.querySelectorAll('.btn.ev').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.btn.ev').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on'); ev=b.dataset.ev; render();
+    });
+  });
+  document.getElementById('zeroBtn').addEventListener('click',function(){
+    zero=!zero; this.classList.toggle('on',zero); render();
+  });
+  ['fM','fT','fW','fB'].forEach(function(id){
+    document.getElementById(id).addEventListener('change',function(){
+      if(id==='fM')fM=this.value; if(id==='fT')fT=this.value;
+      if(id==='fW')fW=this.value; if(id==='fB')fB=this.value; render();
+    });
+  });
+  secSel.addEventListener('change',function(){sec=this.value;render();});
+
+  document.getElementById('randBtn').addEventListener('click',function(){
+    if(!D.entries.length) return;
+    q=''; document.getElementById('q').value='';
+    ev='all'; zero=false; sec='all'; fM='all'; fT='all'; fW='all'; fB='all';
+    document.querySelectorAll('.btn.ev').forEach(function(x){x.classList.remove('on');});
+    document.querySelector('.btn.ev[data-ev="all"]').classList.add('on');
+    document.getElementById('zeroBtn').classList.remove('on');
+    ['fM','fT','fW','fB'].forEach(function(id){document.getElementById(id).value='all';});
+    document.getElementById('sec').value='all';
+    render();
+    var e=D.entries[Math.floor(Math.random()*D.entries.length)];
+    var el=document.getElementById('e-'+e.chapter+'-'+e.num);
+    if(el){el.scrollIntoView({behavior:'smooth',block:'center'});
+      el.classList.add('flash'); setTimeout(function(){el.classList.remove('flash');},1600);}
+  });
+
+  function toast(msg){
+    var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+    setTimeout(function(){t.classList.remove('show');},1400);
+  }
+  function showRefTip(el, e){
+    var old=el.querySelector('.reftip'); if(old) old.remove();
+    var box=document.createElement('div'); box.className='reftip';
+    box.innerHTML='<button class="reftip-x" aria-label="Close">×</button>'+
+      '<div class="reftip-h">↪ Ch. '+e.chapter+', Entry '+e.num+' "'+esc(e.title)+'"</div>'+
+      '<div class="reftip-b">'+linkify(e.plain, e.chapter)+'</div>';
+    el.appendChild(box);
+    box.querySelector('.reftip-x').addEventListener('click',function(ev){ev.stopPropagation();box.remove();});
+    setTimeout(function(){ if(box.parentNode) box.remove(); }, 6000);
+  }
+  document.getElementById('out').addEventListener('click',function(ev3){
+    var a=ev3.target.closest&&ev3.target.closest('.copy');
+    if(!a) return;
+    var e=byId[a.dataset.c+'-'+a.dataset.n]; if(!e) return;
+    var txt='HowToInvestBetter Ch. '+e.chapter+', Entry '+e.num+' "'+e.title+'"\n'+
+      'Cost: '+e.cost+'\nPayoff: '+e.gain+'\nEvidence grade: '+e.grade+'\nSources: '+e.source;
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(function(){toast('Citation copied ✓');},
+        function(){toast('Copy failed, select manually');});
+    } else { toast('Auto-copy not supported here'); }
+  });
+  document.getElementById('out').addEventListener('click',function(ev3){
+    var a=ev3.target.closest&&ev3.target.closest('.share');
+    if(!a) return;
+    var link=location.origin+location.pathname+'#e-'+a.dataset.c+'-'+a.dataset.n;
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(link).then(function(){toast('Link copied ✓');},
+        function(){toast('Copy failed, copy the address bar');});
+    } else { toast('Auto-copy not supported here'); }
+  });
+
+  document.getElementById('out').addEventListener('click',function(ev2){
+    var a=ev2.target.closest&&ev2.target.closest('a.ref');
+    if(!a) return;
+    var id='e-'+a.dataset.c+'-'+a.dataset.n;
+    var el=document.getElementById(id);
+    if(el){
+      el.scrollIntoView({behavior:'smooth',block:'center'});
+      el.classList.add('flash'); setTimeout(function(){el.classList.remove('flash');},1600);
+      var e=byId[a.dataset.c+'-'+a.dataset.n];
+      if(e) showRefTip(el, e);
+    }
+  });
+
+  document.getElementById('foot').innerHTML=
+    'This HowToInvestBetter handbook is a methodology manual, not investment advice, and does not recommend any financial product or strategy. '+
+    'Markets carry risk; make independent judgments and consult licensed professionals. '+
+    'All citations follow each institution’s latest official release. This is an independently authored evidence-based methodology handbook.';
+
+  render();
+
+  if(location.hash && location.hash.indexOf('#e-')===0){
+    setTimeout(function(){
+      var el=document.getElementById(location.hash.slice(1));
+      if(el){el.scrollIntoView({block:'center'});
+        el.classList.add('flash'); setTimeout(function(){el.classList.remove('flash');},1800);}
+    }, 300);
+  }
+})();
+</script>
+</body>
+</html>
