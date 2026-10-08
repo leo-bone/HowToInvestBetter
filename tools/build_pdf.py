@@ -194,22 +194,11 @@ def build():
     story = []
 
     story.append(Spacer(1, 40 * mm))
-    cover_png = os.path.join(ROOT, "cover-book.png")
-    if not os.path.exists(cover_png):
-        cover_png = os.path.join(ROOT, "cover.png")
-    if os.path.exists(cover_png) and _PILImage is not None:
-        w, h = _PILImage.open(cover_png).size
-        tw = (110 * mm) if PRINT_MODE else (150 * mm)
-        im = Image(cover_png, width=tw, height=tw * h / w)
-        story.append(im)
-        story.append(Spacer(1, 8 * mm))
-        story.append(Paragraph("更新于 %s · 共 %d 章 %d 条" % (today, len(chapters), total_entries), COVER_F))
-    else:
-        story.append(Paragraph(esc(TITLE), COVER_T))
-        story.append(Spacer(1, 6 * mm))
-        story.append(Paragraph(esc(SUB), COVER_S))
-        story.append(Spacer(1, 10 * mm))
-        story.append(Paragraph("更新于 %s · 共 %d 章 %d 条" % (today, len(chapters), total_entries), COVER_F))
+    story.append(Paragraph(esc(TITLE), COVER_T))
+    story.append(Spacer(1, 6 * mm))
+    story.append(Paragraph(esc(SUB), COVER_S))
+    story.append(Spacer(1, 10 * mm))
+    story.append(Paragraph("更新于 %s · 共 %d 章 %d 条" % (today, len(chapters), total_entries), COVER_F))
     story.append(PageBreak())
 
     # 版权声明页
