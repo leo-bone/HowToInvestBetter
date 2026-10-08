@@ -17,14 +17,20 @@ HowToInvestBetter —— PDF 生成器（依赖 reportlab + 内置 CJK 字体）
 import os
 import re
 import glob
+import sys
 import datetime
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BOOK = os.path.join(ROOT, "book")
-OUT = os.path.join(ROOT, "HowToInvestBetter.pdf")
 
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
+
+# 纸书印刷级：6×9 英寸开本（KDP Paperback 标准），页边距 0.75″
+PRINT_MODE = "--print" in sys.argv
+PAGESIZE = (6 * 72, 9 * 72) if PRINT_MODE else A4
+MARGIN = (0.75 * 72) if PRINT_MODE else (20 * mm)
+OUT = os.path.join(ROOT, "HowToInvestBetter-print.pdf") if PRINT_MODE else os.path.join(ROOT, "HowToInvestBetter.pdf")
 from reportlab.lib.colors import HexColor
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_LEFT
@@ -43,6 +49,8 @@ FONT = "STSong-Light"
 
 TITLE = "高性价比投资指南"
 SUB = "花掉什么，换回什么，证据有多硬"
+AUTHOR = "HowToInvestBetter 项目组"
+COPYRIGHT_FILE = os.path.join(ROOT, "版权声明.md")
 
 HEAD_RE = re.compile(r"^#\s+(.+?)\s*$")
 ENTRY_RE = re.compile(r"^###\s+(\d+)\.\s+(.+?)\s*$")
@@ -59,6 +67,28 @@ def tagline(tags):
     return "钱：%s ｜ 时间：%s ｜ 毅力：%s ｜ 收益：%s ｜ 口径：%s" % (
         esc(tags.get("钱", "")), esc(tags.get("时间", "")), esc(tags.get("毅力", "")),
         esc(tags.get("收益", "")), esc(tags.get("口径", "")))
+
+
+def read_copyright_flowables():
+    """读取 版权声明.md 渲染为 PDF 流（单一信源，避免与仓库文件漂移）。"""
+    if not os.path.exists(COPYRIGHT_FILE):
+        return []
+    flows = []
+    for line in open(COPYRIGHT_FILE, encoding="utf-8").read().split("\n"):
+        s = line.rstrip()
+        if not s.strip():
+            continue
+        s = s.replace("__AUTHOR__", AUTHOR)
+        s = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", esc(s))
+        if s.startswith("## "):
+            flows.append(Paragraph(s[3:], H2))
+        elif s.startswith("# "):
+            flows.append(Paragraph(s[2:], H1))
+        elif s.startswith("- "):
+            flows.append(Paragraph("· " + s[2:], BODY))
+        else:
+            flows.append(Paragraph(s, INTRO))
+    return flows
 
 
 def parse_chapters():
@@ -137,7 +167,7 @@ def on_page(canvas, doc):
     canvas.setFont(FONT, 8)
     canvas.setFillColor(HexColor("#999999"))
     canvas.drawString(18 * mm, 12 * mm, "高性价比投资指南 · 开源 CC BY 4.0")
-    canvas.drawRightString(A4[0] - 18 * mm, 12 * mm, "第 %d 页" % doc.page)
+    canvas.drawRightString(doc.pagesize[0] - 18 * mm, 12 * mm, "第 %d 页" % doc.page)
     canvas.restoreState()
 
 
@@ -147,10 +177,10 @@ def build():
     today = datetime.date.today().isoformat()
 
     doc = SimpleDocTemplate(
-        OUT, pagesize=A4,
-        leftMargin=20 * mm, rightMargin=20 * mm,
-        topMargin=18 * mm, bottomMargin=18 * mm,
-        title=TITLE, author="HowToInvestBetter 项目",
+        OUT, pagesize=PAGESIZE,
+        leftMargin=MARGIN, rightMargin=MARGIN,
+        topMargin=MARGIN, bottomMargin=MARGIN,
+        title=TITLE, author=AUTHOR,
         subject="循证投资手册", lang="zh-CN",
     )
     story = []
@@ -159,7 +189,7 @@ def build():
     cover_png = os.path.join(ROOT, "cover.png")
     if os.path.exists(cover_png) and _PILImage is not None:
         w, h = _PILImage.open(cover_png).size
-        tw = 150 * mm
+        tw = (110 * mm) if PRINT_MODE else (150 * mm)
         im = Image(cover_png, width=tw, height=tw * h / w)
         story.append(im)
         story.append(Spacer(1, 8 * mm))
@@ -172,6 +202,16 @@ def build():
         story.append(Spacer(1, 10 * mm))
         story.append(Paragraph("开源 · CC BY 4.0", COVER_F))
         story.append(Paragraph("更新于 %s · 共 %d 章 %d 条" % (today, len(chapters), total_entries), COVER_F))
+    story.append(PageBreak())
+
+    # 版权声明页
+    story.append(Paragraph("版权声明", H1))
+    story.append(HRFlowable(width="100%", color=HexColor("#c0392b"), thickness=1, spaceAfter=8))
+    for fl in read_copyright_flowables():
+        story.append(fl)
+    if PRINT_MODE:
+        story.append(Spacer(1, 8))
+        story.append(Paragraph("ISBN：______________（纸书投稿前向 KDP 免费申请，或填写自有 ISBN）", META))
     story.append(PageBreak())
 
     # 导读页

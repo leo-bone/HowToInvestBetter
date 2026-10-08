@@ -101,6 +101,15 @@
     padding:8px 16px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:20;}
   .toast.show{opacity:.95;}
   @media(max-width:640px){.neglist{columns:1;}}
+
+  .reftip{position:relative;margin:10px 0 2px;padding:10px 30px 10px 12px;border:1px solid var(--a);
+    border-radius:9px;background:var(--tagA);font-size:13px;line-height:1.6;animation:rfin .18s ease;}
+  @keyframes rfin{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:none;}}
+  .reftip-h{font-weight:700;color:var(--a);margin-bottom:3px;}
+  .reftip-b{color:#0b3a44;}
+  .reftip-x{position:absolute;top:4px;right:6px;border:none;background:transparent;
+    color:var(--a);font-size:16px;line-height:1;cursor:pointer;}
+  .reftip-x:hover{color:var(--warn);}
 </style>
 </head>
 <body>
@@ -185,17 +194,29 @@
     '<span>许可 CC BY 4.0</span>';
 
   function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-  function linkify(s){
-    return esc(s).replace(/第(\d+)章第(\d+)条/g,
-      '<a class="ref" data-c="$1" data-n="$2">第$1章第$2条</a>');
+  // 交叉引用转可点链接：支持「第X章第Y条」（跨章）、「第 N 条」与「第 N、M 条」（同章，可多条目）
+  function linkRefs(text, chap){
+    // 1. 保护跨章引用，避免后续把其中的「第Y条」误判为同章引用
+    text = text.replace(/第\s*(\d+)\s*章\s*第\s*(\d+)\s*条/g,
+      function(_,c,n){ return '[[C'+c+'N'+n+']]'; });
+    // 2. 同章引用（单条或多条，形如 第 2 条 / 第 2、14 条）；数字过大视为法条，不渲染为引用
+    text = text.replace(/第\s*(\d+(?:\s*、\s*\d+)*)\s*条/g, function(_, nums){
+      return nums.split(/\s*、\s*/).map(function(x){
+        if (+x > 25) return '第'+x+'条';
+        return '<a class="ref" data-c="'+chap+'" data-n="'+x+'">第'+x+'条</a>';
+      }).join('、');
+    });
+    // 3. 还原跨章引用
+    text = text.replace(/\[\[C(\d+)N(\d+)\]\]/g,
+      function(_,c,n){ return '<a class="ref" data-c="'+c+'" data-n="'+n+'">第'+c+'章第'+n+'条</a>'; });
+    return text;
   }
+  function linkify(s, chap){ return linkRefs(esc(s), chap); }
   // 章导语轻量 markdown：加粗 **x** + 交叉引用链接（第X条 / 第X章第X条）
   function mdlight(s, chap){
     var t = esc(s);
     t = t.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
-    t = t.replace(/第(\d+)章第(\d+)条/g, '<a class="ref" data-c="$1" data-n="$2">第$1章第$2条</a>');
-    t = t.replace(/第(\d+)条/g, '<a class="ref" data-c="'+chap+'" data-n="$1">第$1条</a>');
-    return t;
+    return linkRefs(t, chap);
   }
   function chip(label,val){
     var cls = (val==='0'||val==='否') ? 'cost no' : (val==='多'?'cost big':'cost');
@@ -223,13 +244,13 @@
       '<span class="imp">收益·'+esc(e.benefit)+'</span>';
     if(e.impact) tags+='<span class="imp">影响：'+esc(e.impact)+'</span>';
     if(e.three_zero) tags+='<span class="cz">三零</span>';
-    var note = e.note ? '<div class="note"><b>备注：</b>'+linkify(e.note)+'</div>' : '';
+    var note = e.note ? '<div class="note"><b>备注：</b>'+linkify(e.note, e.chapter)+'</div>' : '';
     return '<div class="card" id="e-'+e.chapter+'-'+e.num+'">'+
       '<div class="head"><span class="id">第 '+e.chapter+' 章第 '+e.num+' 条</span>'+
         '<h3>'+esc(e.title)+'</h3>'+tags+'</div>'+
-      '<div class="row"><span class="k">成本</span><span>'+linkify(e.cost)+'</span></div>'+
-      '<div class="plain"><b>说人话：</b>'+linkify(e.plain)+'</div>'+
-      '<div class="row"><span class="k">收益</span><span>'+linkify(e.gain)+'</span></div>'+
+      '<div class="row"><span class="k">成本</span><span>'+linkify(e.cost, e.chapter)+'</span></div>'+
+      '<div class="plain"><b>说人话：</b>'+linkify(e.plain, e.chapter)+'</div>'+
+      '<div class="row"><span class="k">收益</span><span>'+linkify(e.gain, e.chapter)+'</span></div>'+
       '<div class="row"><span class="k">来源</span><span>'+esc(e.source)+'</span></div>'+
       note+
       '<div class="acts"><span class="copy" data-c="'+e.chapter+'" data-n="'+e.num+'">📋 复制引用</span>'+
@@ -314,6 +335,17 @@
     var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
     setTimeout(function(){t.classList.remove('show');},1400);
   }
+  // 点击交叉引用：在目标卡片内就地展开「标题 + 说人话」，6 秒后或点击 × 收起
+  function showRefTip(el, e){
+    var old=el.querySelector('.reftip'); if(old) old.remove();
+    var box=document.createElement('div'); box.className='reftip';
+    box.innerHTML='<button class="reftip-x" aria-label="关闭">×</button>'+
+      '<div class="reftip-h">↪ 第 '+e.chapter+' 章第 '+e.num+' 条《'+esc(e.title)+'》</div>'+
+      '<div class="reftip-b">'+linkify(e.plain, e.chapter)+'</div>';
+    el.appendChild(box);
+    box.querySelector('.reftip-x').addEventListener('click',function(ev){ev.stopPropagation();box.remove();});
+    setTimeout(function(){ if(box.parentNode) box.remove(); }, 6000);
+  }
   document.getElementById('out').addEventListener('click',function(ev3){
     var a=ev3.target.closest&&ev3.target.closest('.copy');
     if(!a) return;
@@ -340,8 +372,12 @@
     if(!a) return;
     var id='e-'+a.dataset.c+'-'+a.dataset.n;
     var el=document.getElementById(id);
-    if(el){el.scrollIntoView({behavior:'smooth',block:'center'});
-      el.classList.add('flash'); setTimeout(function(){el.classList.remove('flash');},1600);}
+    if(el){
+      el.scrollIntoView({behavior:'smooth',block:'center'});
+      el.classList.add('flash'); setTimeout(function(){el.classList.remove('flash');},1600);
+      var e=byId[a.dataset.c+'-'+a.dataset.n];
+      if(e) showRefTip(el, e);
+    }
   });
 
   document.getElementById('foot').innerHTML=

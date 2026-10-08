@@ -29,6 +29,8 @@ TAG_RE = re.compile(r"^<!--\s*标签:\s*(.+?)\s*-->$")
 FIELD_RE = re.compile(r"^-\s*(成本|说人话|收益|证据等级|来源|备注)[：:]\s*(.*)$")
 TAG_KEYS = ["钱", "时间", "毅力", "收益", "口径", "影响"]
 XREF_RE = re.compile(r"第\s*(\d+)\s*[章节]\s*第\s*(\d+)\s*条")
+# 同章引用：单条「第 N 条」或多条「第 N、M 条」（允许空格、顿号分隔）
+BARE_MULTI_RE = re.compile(r"第\s*(\d+(?:\s*、\s*\d+)*)\s*条")
 
 
 def collect():
@@ -121,11 +123,13 @@ def main():
         if v > 1:
             problems.append("ID 重复：第%d章第%d条 出现 %d 次" % (k[0], k[1], v))
 
-    # 5. 交叉引用校验
+    # 5. 交叉引用校验（支持「第X章第Y条」跨章 与 「第 N 条」「第 N、M 条」同章）
     valid_refs = set((e["chapter"], e["num"]) for e in entries)
+    max_item = max((e["num"] for e in entries), default=0)
     xref_missing = []
     seen = set()
     for e in entries:
+        # 跨章引用
         for cm, em in XREF_RE.findall(e["raw"]):
             ref = (int(cm), int(em))
             if ref in seen:
@@ -134,6 +138,38 @@ def main():
             if ref not in valid_refs:
                 xref_missing.append("引用失效 [%s] 第%d章第%d条 指向 第%d章第%d条（不存在）" % (
                     e["src"], e["chapter"], e["num"], ref[0], ref[1]))
+        # 同章引用：先把跨章引用占位，避免把其中的「第Y条」误判为同章引用
+        prot = XREF_RE.sub(lambda m: "\x00" + m.group(1) + "\x01" + m.group(2) + "\x02", e["raw"])
+        for m in BARE_MULTI_RE.finditer(prot):
+            for x in m.group(1).split("、"):
+                n = int(x)
+                if n > max_item:
+                    continue  # 形如「第41条」为法条而非条目引用，跳过
+                ref = (e["chapter"], n)
+                if ref in seen:
+                    continue
+                seen.add(ref)
+                if ref not in valid_refs:
+                    xref_missing.append("引用失效 [%s] 第%d章第%d条 指向 第%d章第%d条（不存在）" % (
+                        e["src"], e["chapter"], e["num"], ref[0], ref[1]))
+
+    # 6. 文档数字同步校验：README / GUIDE 的证据分布必须与计算结果一致
+    triple_re = re.compile(r"A\s*级\s*(\d+)\s*条[、，]\s*B\s*级\s*(\d+)\s*条[、，]\s*C\s*级\s*(\d+)")
+    gdoc = {"A": 0, "B": 0, "C": 0}
+    for e in entries:
+        gdoc[e["grade"]] = gdoc.get(e["grade"], 0) + 1
+    for doc in ("README.md", "GUIDE.md"):
+        dp = os.path.join(ROOT, doc)
+        if not os.path.exists(dp):
+            continue
+        txt = open(dp, encoding="utf-8").read()
+        m = triple_re.search(txt)
+        if not m:
+            continue
+        da, db, dc = int(m.group(1)), int(m.group(2)), int(m.group(3))
+        if (da, db, dc) != (gdoc["A"], gdoc["B"], gdoc["C"]):
+            problems.append("文档数字不同步 [%s] 写的是 A=%d B=%d C=%d，实际 A=%d B=%d C=%d" % (
+                doc, da, db, dc, gdoc["A"], gdoc["B"], gdoc["C"]))
 
     # 统计
     grade = {"A": 0, "B": 0, "C": 0}

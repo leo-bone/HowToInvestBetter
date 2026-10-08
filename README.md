@@ -17,11 +17,12 @@
 
 | | |
 |---|---|
-| **下载** | [PDF](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter.pdf) · [EPUB](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter.epub) · [离线单文件 HTML](https://leo-bone.github.io/HowToInvestBetter/offline.html) |
+| **下载** | [PDF](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter.pdf) · [EPUB](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter.epub) · [离线单文件 HTML](https://leo-bone.github.io/HowToInvestBetter/offline.html) · [印刷级 PDF（6×9，纸书投稿用）](https://github.com/leo-bone/HowToInvestBetter/raw/main/HowToInvestBetter-print.pdf) |
 | **查阅** | [在线检索页](https://leo-bone.github.io/HowToInvestBetter/) · [目录](#目录) · [证据分级说明](#证据分级说明) · [构建与校验](#自己跑一份) |
 | **长文** | [全书导读](GUIDE.md)（为什么写这本书／三零原则／证据体系／章节地图） |
 | **正文源文件** | [`book/`](book/) 下的 Markdown，可在线直接读，也是检索页的数据源 |
 | **其他语言** | [English](i18n/README.en.md) · [Русский](i18n/README.ru.md) · [Español](i18n/README.es.md) · [Português](i18n/README.pt.md) · [Deutsch](i18n/README.de.md) · [Tiếng Việt](i18n/README.vi.md) |
+| **出版** | [亚马逊 KDP 上架方案](AMAZON-上架方案.md)（竞品分析 · 格式清单 · 行动步骤）· 版权声明见 [版权声明](版权声明.md)（CC BY 4.0，沿用《高性价比人生指南》方法论并署名） |
 
 ---
 
@@ -165,7 +166,7 @@ python3 tools/lint.py
 - 〔B〕单项高质量研究、权威机构（Vanguard／Dalbar／Ibbotson）回测报告、经典论文。
 - 〔C〕合理推论／广泛共识，逻辑硬但不勉强挂精确出处。
 
-当前分布：A 级 136 条、B 级 105 条、C 级 58 条。
+当前分布：A 级 136 条、B 级 106 条、C 级 60 条。
 
 > **核实状态**：本版所有数字均已核对官方文件或权威研究，正文无 `〔待核实〕` 未核实条目；凡结论存在适用边界或相反观点的，仍标 `〔争议〕`。
 

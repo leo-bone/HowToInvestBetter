@@ -28,8 +28,9 @@ BULLET_RE = re.compile(r"^[-*]\s+(.+?)\s*$")
 FIELDS = ["成本", "说人话", "收益", "证据等级", "来源", "备注"]
 
 TITLE = "高性价比投资指南"
-AUTHOR = "HowToInvestBetter 项目"
+AUTHOR = "HowToInvestBetter 项目组"
 UID = "howtoinvestbetter-2026"
+COPYRIGHT_FILE = os.path.join(ROOT, "版权声明.md")
 
 
 def parse_book():
@@ -122,6 +123,8 @@ def chapter_xhtml(num, title, intro, entries, items):
 CSS = """
 body{font-family:"Noto Serif CJK SC","Songti SC",serif;line-height:1.85;margin:1.2em;color:#1a1a1a;}
 h1.ch{font-size:1.5em;border-bottom:2px solid #c0392b;padding-bottom:.3em;margin-bottom:.6em;}
+h2.ch2{font-size:1.15em;color:#111;margin:.9em 0 .3em;}
+.cp{color:#444;font-size:.92em;}
 .intro{color:#444;font-size:.95em;}
 .entry{border-left:3px solid #e0e0e0;padding-left:.9em;margin:1.1em 0;}
 .entry h3{font-size:1.12em;margin:.5em 0 .2em;color:#111;}
@@ -175,6 +178,43 @@ def preface_xhtml():
 </body></html>"""
 
 
+def copyright_xhtml():
+    if not os.path.exists(COPYRIGHT_FILE):
+        return preface_xhtml()
+    parts = ['<?xml version="1.0" encoding="utf-8"?>',
+             '<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">',
+             '<head><title>版权声明</title></head><body>']
+    in_list = False
+    for line in open(COPYRIGHT_FILE, encoding="utf-8").read().split("\n"):
+        s = line.rstrip()
+        if not s.strip():
+            if in_list:
+                parts.append("</ul>"); in_list = False
+            continue
+        s = s.replace("__AUTHOR__", AUTHOR)
+        s = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", esc(s))
+        if s.startswith("## "):
+            if in_list:
+                parts.append("</ul>"); in_list = False
+            parts.append('<h2 class="ch2">%s</h2>' % s[3:])
+        elif s.startswith("# "):
+            if in_list:
+                parts.append("</ul>"); in_list = False
+            parts.append('<h1 class="ch">%s</h1>' % s[2:])
+        elif s.startswith("- "):
+            if not in_list:
+                parts.append('<ul class="revlist">'); in_list = True
+            parts.append('<li>%s</li>' % s[2:])
+        else:
+            if in_list:
+                parts.append("</ul>"); in_list = False
+            parts.append('<p class="cp">%s</p>' % s)
+    if in_list:
+        parts.append("</ul>")
+    parts.append("</body></html>")
+    return "\n".join(parts)
+
+
 def build():
     chapters = parse_book()
     chapters = [c for c in chapters if c[3] or c[4]]
@@ -185,15 +225,19 @@ def build():
     opf_items.append('<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/>')
     ncx_points.append('<navPoint id="np-cover" playOrder="1"><navLabel><text>封面</text></navLabel><content src="cover.xhtml"/></navPoint>')
 
+    xhtml_files.append(("copyright.xhtml", copyright_xhtml()))
+    opf_items.append('<item id="copyright" href="copyright.xhtml" media-type="application/xhtml+xml"/>')
+    ncx_points.append('<navPoint id="np-copyright" playOrder="2"><navLabel><text>版权声明</text></navLabel><content src="copyright.xhtml"/></navPoint>')
+
     xhtml_files.append(("preface.xhtml", preface_xhtml()))
     opf_items.append('<item id="preface" href="preface.xhtml" media-type="application/xhtml+xml"/>')
-    ncx_points.append('<navPoint id="np-preface" playOrder="2"><navLabel><text>导读</text></navLabel><content src="preface.xhtml"/></navPoint>')
+    ncx_points.append('<navPoint id="np-preface" playOrder="3"><navLabel><text>导读</text></navLabel><content src="preface.xhtml"/></navPoint>')
 
     if HAVE_COVER_IMG:
         opf_items.append('<item id="coverimg" href="cover.png" media-type="image/png"/>')
 
-    play = 3
-    titles = {"cover.xhtml": "封面", "preface.xhtml": "导读"}
+    play = 4
+    titles = {"cover.xhtml": "封面", "copyright.xhtml": "版权声明", "preface.xhtml": "导读"}
     for num, title, intro, entries, items in chapters:
         fn = "ch%02d.xhtml" % num
         titles[fn] = title
