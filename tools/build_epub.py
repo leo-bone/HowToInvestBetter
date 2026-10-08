@@ -28,7 +28,7 @@ BULLET_RE = re.compile(r"^[-*]\s+(.+?)\s*$")
 FIELDS = ["成本", "说人话", "收益", "证据等级", "来源", "备注"]
 
 TITLE = "高性价比投资指南"
-AUTHOR = "HowToInvestBetter 项目组"
+AUTHOR = "leo-bone"
 UID = "howtoinvestbetter-2026"
 COPYRIGHT_FILE = os.path.join(ROOT, "版权声明.md")
 
@@ -134,7 +134,9 @@ b{color:#c0392b;}
 .revlist li{margin:.4em 0;}
 """
 
-COVER_IMG = os.path.join(ROOT, "cover.png")
+COVER_IMG = os.path.join(ROOT, "cover-book.png")
+if not os.path.exists(COVER_IMG):
+    COVER_IMG = os.path.join(ROOT, "cover.png")
 HAVE_COVER_IMG = os.path.exists(COVER_IMG)
 
 if HAVE_COVER_IMG:

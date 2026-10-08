@@ -49,7 +49,7 @@ FONT = "STSong-Light"
 
 TITLE = "高性价比投资指南"
 SUB = "花掉什么，换回什么，证据有多硬"
-AUTHOR = "HowToInvestBetter 项目组"
+AUTHOR = "leo-bone"
 COPYRIGHT_FILE = os.path.join(ROOT, "版权声明.md")
 
 HEAD_RE = re.compile(r"^#\s+(.+?)\s*$")
@@ -186,7 +186,9 @@ def build():
     story = []
 
     story.append(Spacer(1, 40 * mm))
-    cover_png = os.path.join(ROOT, "cover.png")
+    cover_png = os.path.join(ROOT, "cover-book.png")
+    if not os.path.exists(cover_png):
+        cover_png = os.path.join(ROOT, "cover.png")
     if os.path.exists(cover_png) and _PILImage is not None:
         w, h = _PILImage.open(cover_png).size
         tw = (110 * mm) if PRINT_MODE else (150 * mm)
