@@ -51,7 +51,7 @@ FONT = "STSong-Light"  # CJK-capable; also renders Latin glyphs
 
 TITLE = "A High-Value Investment Guidebook"
 SUB = "What it costs, what it returns, how strong the evidence is"
-AUTHOR = "leo-bone"
+AUTHOR = "leo"
 
 HEAD_RE = re.compile(r"^#\s+(.+?)\s*$")
 ENTRY_RE = re.compile(r"^###\s+(\d+)\.\s+(.+?)\s*$")
@@ -161,7 +161,7 @@ def on_page(canvas, doc):
     canvas.saveState()
     canvas.setFont(FONT, 8)
     canvas.setFillColor(HexColor("#999999"))
-    canvas.drawString(MARGIN, 12 * mm, "A High-Value Investment Guidebook · Open source CC BY 4.0")
+    canvas.drawString(MARGIN, 12 * mm, "A High-Value Investment Guidebook")
     canvas.drawRightString(doc.pagesize[0] - MARGIN, 12 * mm, "Page %d" % doc.page)
     canvas.restoreState()
 
@@ -186,7 +186,6 @@ def build():
     story.append(Spacer(1, 6 * mm))
     story.append(Paragraph(esc(SUB), COVER_S))
     story.append(Spacer(1, 10 * mm))
-    story.append(Paragraph("Open source · CC BY 4.0", COVER_F))
     story.append(Paragraph("Updated %s · %d chapters · %d entries" % (today, len(chapters), total_entries), COVER_F))
     story.append(PageBreak())
 
@@ -194,9 +193,9 @@ def build():
     story.append(Paragraph("License &amp; Disclaimer", H1))
     story.append(HRFlowable(width="100%", color=HexColor("#c0392b"), thickness=1, spaceAfter=8))
     license_lines = [
-        "The main content of this guidebook is licensed under CC BY 4.0 (Creative Commons Attribution 4.0 International). You are free to share, adapt, and use it commercially, provided you give appropriate credit to the author, leo-bone, and indicate if changes were made. The code (search page, build scripts) is licensed under MIT.",
+        "This guidebook is an independently authored, evidence-based methodology handbook. All content is provided for educational and reference purposes only and does not constitute investment advice, an offer, or a solicitation from any institution or individual. Markets carry risk; decisions require independent judgment and consultation with a licensed professional.",
         "This guidebook is an independently authored, evidence-based methodology handbook and is not investment advice from any institution or individual. All citations follow each organization's latest official releases. Markets carry risk; decisions require independent judgment and consultation with a licensed professional.",
-        "This is an open-source edition. The latest version and the Chinese original are maintained at github.com/leo-bone/HowToInvestBetter.",
+        "Copyright (c) 2026 leo. All rights reserved.",
     ]
     for ln in license_lines:
         story.append(Paragraph(esc(ln), INTRO))

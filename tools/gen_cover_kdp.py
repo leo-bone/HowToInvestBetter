@@ -10,7 +10,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "cover-book.png")
-AUTHOR = "leo-bone"
+AUTHOR = "leo"
 
 HEITI = "/System/Library/Fonts/STHeiti Medium.ttc"
 SONG = "/System/Library/Fonts/Supplemental/Songti.ttc"
@@ -65,7 +65,7 @@ def main():
     d.line([(cx - 360, 960), (cx + 360, 960)], fill=(86, 104, 129), width=3)
 
     # 数据 chips（居中排成一行）
-    chips = ["302 条", "24 章", "证据 A/B/C", "CC BY 4.0"]
+    chips = ["302 条", "24 章", "证据 A/B/C"]
     f_chip = font(SONG, 44)
     # 先量总宽
     gaps = 40
@@ -89,7 +89,7 @@ def main():
     f_foot = font(SONG, 44)
     d.line([(cx - 360, H - 360), (cx + 360, H - 360)], fill=(86, 104, 129), width=3)
     draw_center(d, "作者  %s" % AUTHOR, cx, H - 300, f_foot, (203, 213, 225))
-    draw_center(d, "开源 CC BY 4.0 · 只引期刊论文与官方文件", cx, H - 230, f_foot, (100, 116, 139))
+    draw_center(d, "只引期刊论文与官方文件", cx, H - 230, f_foot, (100, 116, 139))
 
     img.save(OUT, "PNG", optimize=True)
     print("[ok] 已生成", OUT, os.path.getsize(OUT), "bytes")

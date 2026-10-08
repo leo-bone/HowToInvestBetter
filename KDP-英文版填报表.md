@@ -15,10 +15,10 @@
 | **Subtitle** | What it costs, what it returns, how strong the evidence is |
 | **Series** | 留空 |
 | **Edition number** | 留空（首版） |
-| **Author** | leo-bone |
+| **Author** | leo |
 | **Contributors** | 留空 |
-| **Publisher** | leo-bone (self-published) |
-| **Publishing rights** | 勾选「I own the copyright and I hold the necessary publishing rights.」（原创 + CC BY 4.0 授权，合规） |
+| **Publisher** | leo (self-published) |
+| **Publishing rights** | 勾选「I own the copyright and I hold the necessary publishing rights.」（原创作品，作者持有版权与出版权） |
 | **Primary audience** | 留空（成人向） |
 
 ---
@@ -47,12 +47,12 @@
 
 <p><b>Who it's for:</b> the self-directed investor who is tired of conflicting advice and wants a calm, evidence-first map of what's worth doing — and what's not.</p>
 
-<p>The full text is also <b>free to read online and open source</b> (CC BY 4.0). This Kindle / paperback edition is the carefully formatted, citation-linked, portable version — built for the reader who wants the whole map in one place.</p>
+<p>This Kindle / paperback edition is the carefully formatted, citation-linked, portable version — built for the reader who wants the whole map in one place.</p>
 
-<p><i>Open source under Creative Commons CC BY 4.0. Author: leo-bone.</i></p>
+<p><i>Copyright © 2026 leo. All rights reserved.</i></p>
 ```
 
-> 最终版（含 GitHub 引流段）。社媒文案、样书验收清单、30 天节奏见 [`KDP-英文版上线推广包.md`](KDP-英文版上线推广包.md)。
+> 最终版（含发布文案）。社媒文案、样书验收清单、30 天节奏见 [`KDP-英文版上线推广包.md`](KDP-英文版上线推广包.md)。
 
 ---
 
@@ -92,7 +92,7 @@
 | 纸书内文 | `HowToInvestBetter-en-print.pdf` | **6" × 9"**，**366 页**，已含页码／版权页 |
 | 纸书完整书封 | `cover-paperback-en.pdf` | 300 DPI，**13.0742" × 9.2500"**，含出血；KDP 首选 PDF |
 | （备用）书封位图 | `cover-paperback-en.png` | 3922 × 2775，300 DPI |
-| （导流）社交卡 | `en-cover.png` | 1200 × 630，GitHub Pages / 社交分享 |
+| 社交分享卡 | `en-cover.png` | 1200 × 630，用于社媒分享 |
 
 ---
 
@@ -104,7 +104,7 @@
 | 平装纸书 | **$16.99** | 60% | 366 页黑白白纸，KDP 会自动给出最低价（约 $7.5 起），$16.99 到手约 $6–$7 |
 
 - **Territories**：Worldwide rights（全球）
-- **KDP Select**：**不勾**（勾了 90 天 Kindle 独家，与 GitHub 免费全文冲突；保持双渠道）
+- **KDP Select**：**不勾**（勾了要 90 天 Kindle 独家，限制较大；如需进 Kindle Unlimited 再单独评估）
 - **Matchbook / 低价匹配**：可选开，促销时纸书自动跟价
 
 > 电子书定价想更低冲量可设 $3.99（仍 70%）；想更贴合英文市场专业手册定位可设 $5.99–$6.99。$4.99 是平衡默认。
@@ -145,7 +145,7 @@
 [ ] 7. + Create → Paperback，字段同上，传 en-print.pdf + cover-paperback-en.pdf
 [ ] 8. 纸张=White / 裁切=6×9 / 出血=Bleed / 免费 ISBN → Publish
 [ ] 9. 买一本 Author Copy 实体样书核对印刷
-[ ] 10. 描述末尾互链免费全文：github.com/leo-bone/HowToInvestBetter
+[ ] 10. 描述末尾无需互链外部免费全文。
 ```
 
 ---
@@ -154,7 +154,7 @@
 
 - **英文版是打开 Amazon.com 最大市场的主力**，建议**先上英文版**（受众大、定价空间更大、无中文乱码风险）。
 - 中文版随后走同一账户上架（Language=Chinese (Simplified)），字段见 [`KDP-中文版填报表.md`](KDP-中文版填报表.md)。
-- 两版共用同一作者名与 GitHub 仓库导流；不要勾 KDP Select，保持 GitHub 免费全文同步引流。
+- 两版共用同一作者名（leo）；不要勾 KDP Select，保持多渠道销售。
 
 ---
 
@@ -166,5 +166,5 @@
 | 纸书页数变了没重出书封 | 书脊错位、裁切切字 | 改内文后必跑 `tools/gen_cover_en.py` |
 | 纸书纸张选米色 | 0.8242″ 书脊失效 | 选 White；要米色先重算书脊（`--cream`） |
 | 定价低于 $2.99 | 只能拿 35% | 维持 $2.99–$9.99 |
-| 勾了 KDP Select | 违反独家、与 GitHub 冲突 | 不勾 |
+| 勾了 KDP Select | 90 天 Kindle 独家限制 | 按需评估 |
 | 描述里放外部购买链接 | 可能被拒 | 只放"免费在线试读"式引导，不放竞品链接 |

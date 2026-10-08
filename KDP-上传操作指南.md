@@ -50,10 +50,10 @@
 | **Language（语言）** | Chinese (Simplified) |
 | **Book title（书名）** | 高性价比投资指南 |
 | **Subtitle（副标题）** | 花掉什么，换回什么，证据有多硬（循证投资手册） |
-| **Author（作者）** | leo-bone |
+| **Author（作者）** | leo |
 | **Contributors（贡献者）** | 留空 |
 | **Description（描述）** | ↓ 见下方整段复制 |
-| **Publishing rights（出版权）** | 勾选 **「I own the copyright and I hold the necessary publishing rights.」**（CC BY 4.0 衍生 + 独立原创，合规） |
+| **Publishing rights（出版权）** | 勾选 **「I own the copyright and I hold the necessary publishing rights.」**（原创作品，作者持有版权与出版权） |
 
 **Description 整段（复制下面全部）：**
 
@@ -89,7 +89,7 @@
 | **Territories（销售区域）** | 选「Worldwide rights（全球）」 |
 | **Royalty（版税）** | 选 **70%**（必须价格落在 $2.99–$9.99 才可选） |
 | **List price（定价）** | **$3.99**（落在 70% 区间；美国/英国/欧洲/日本等站点可一起设，统一 $3.99 即可） |
-| **KDP Select（可选）** | 不勾（勾了要 90 天 Kindle 独家，不利于 GitHub 免费版同步引流；想进 Kindle Unlimited 再考虑） |
+| **KDP Select（可选）** | 不勾（勾了要 90 天 Kindle 独家；想进 Kindle Unlimited 再考虑） |
 
 > 70% 版税下，$3.99 你实际到手约 **$2.79/本**（扣约 30% 渠道+增值税）。35% 档到手更少且无需价格限制，所以 $3.99 + 70% 是最优默认。
 
@@ -137,13 +137,13 @@
 
 ---
 
-## 4. 上线后：用 GitHub 免费版导流（零成本流量）
+## 4. 上线后：导流（零成本流量）
 
-书在 Amazon 卖，但 GitHub 仓库 `leo-bone.github.io/HowToInvestBetter` 的检索页是**免费、可被搜索引擎收录**的入口：
+书在 Amazon 卖，可同时维护一个免费的检索页（可被搜索引擎收录）作为入口：
 
-1. 在 GitHub 仓库 Settings → Pages 已启用（当前已 200 可访问）。
+1. 检索页部署在任意静态托管上并启用（可被搜索引擎收录）。
 2. README 已有 6 语言版 + 下载入口，海外华人搜"投资指南"有机会被 Google 收进来。
-3. 可在 Amazon 书的描述末尾加一句：「免费在线试读：github.com/leo-bone/HowToInvestBetter」，把免费读者转成付费买家。
+3. 可在自有渠道（邮件 / 社媒）告知读者，把免费读者转成付费买家。
 4. 可选：提交 sitemap 到 Google Search Console，加快收录。
 
 ---
@@ -158,7 +158,7 @@
 [ ] 5. 新建 Paperback，照抄 §3 字段，传 print.pdf + cover-paperback.pdf
 [ ] 6. 纸张=白纸 / 裁切=6×9 / 出血=Bleed / 免费 ISBN → Publish
 [ ] 7. 买一本 Author Copy 实体样书核对印刷
-[ ] 8. 在 GitHub README / 书描述互链导流
+[ ] 8. 在自有渠道 / 书描述互链导流
 ```
 
 **预计总耗时**：账户审核 7–10 天是硬等待；纯上架操作半天能搞定。
@@ -175,7 +175,7 @@
 | 纸书出血选 None | 封面四周被裁掉 | 选 Bleed |
 | EPUB 中文乱码 | 审核退回 / 读者差评 | 上传前用 Kindle Previewer 校验 |
 | 定价低于 $2.99 | 只能选 35% 版税 | 维持 $2.99–$9.99 拿 70% |
-| 勾了 KDP Select 又想免费放 GitHub | 违反独家条款 | 不勾 Select，保持双渠道 |
+| 勾了 KDP Select | 90 天 Kindle 独家限制 | 按需评估 |
 
 ---
 

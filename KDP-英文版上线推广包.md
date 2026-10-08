@@ -16,7 +16,7 @@ KDP 纸书上线前**务必先买一本 Author Copy**（比读者价便宜、不
 [ ] 3. 内文：页码连续、无空白页 / 重复页；第 1 章从奇数页（右页）起
 [ ] 4. 图表 / 表格：无跨页断裂、无溢出文本框、无图片模糊（本版纯文字，重点查表格换行）
 [ ] 5. 字体：英文无乱码；引号 " " 、破折号 — 、连字符 - 渲染正确（最容易出问题）
-[ ] 6. 版权页：书名 / 副标题 / 作者 / CC BY 4.0 / 年份 齐全
+[ ] 6. 版权页：书名 / 副标题 / 作者 / 版权声明 / 年份 齐全
 [ ] 7. 手感：纸张厚度（White 标准）、装订是否开胶、翻页是否掉页
 [ ] 8. 比对：样书与上传的 HowToInvestBetter-en-print.pdf 视觉一致（尤其书脊宽度）
 ```
@@ -25,7 +25,7 @@ KDP 纸书上线前**务必先买一本 Author Copy**（比读者价便宜、不
 
 ---
 
-## B. Amazon 图书描述（HTML · 整段复制，已含 GitHub 引流段）
+## B. Amazon 图书描述（HTML · 整段复制）
 
 > KDP 描述支持有限 HTML：`<b> <i> <u> <h2> <p> <br> <ul><li> <a>`。下面整段复制粘贴即可。
 > 这一段是**最终版**，已取代填报表 §2 的纯文本占位。
@@ -52,12 +52,12 @@ KDP 纸书上线前**务必先买一本 Author Copy**（比读者价便宜、不
 
 <p><b>Who it's for:</b> the self-directed investor who is tired of conflicting advice and wants a calm, evidence-first map of what's worth doing — and what's not.</p>
 
-<p>The full text is also <b>free to read online and open source</b> (CC BY 4.0). This Kindle / paperback edition is the carefully formatted, citation-linked, portable version — built for the reader who wants the whole map in one place.</p>
+<p>This Kindle / paperback edition is the carefully formatted, citation-linked, portable version — built for the reader who wants the whole map in one place.</p>
 
-<p><i>Open source under Creative Commons CC BY 4.0. Author: leo-bone.</i></p>
+<p><i>Copyright © 2026 leo. All rights reserved.</i></p>
 ```
 
-> 引流逻辑：免费全文（GitHub）建立信任 → 付费版是「方便携带 / 引用可点 / 排版精修」的版本。两段都放，但不在描述里放竞品购买链接（会被拒）。
+> 文案逻辑：强调「循证、可核查出处、排版精修、方便携带」；不在描述里放竞品或外部链接（会被拒）。
 
 ---
 
@@ -75,20 +75,20 @@ KDP 纸书上线前**务必先买一本 Author Copy**（比读者价便宜、不
 
 **5/** Finding #4: taxes are the only certainty. Account ordering, holding periods, and tax-loss harvesting are all Grade A — boring, but they move real after-tax returns more than clever stock picks.
 
-**6/** I made the whole thing open source and free to read (CC BY 4.0) because the evidence shouldn't be paywalled. If you want the formatted, citation-linked edition, it's on Amazon. Link in replies.
+**6/** I wrote an evidence-graded, 302-entry investing guide because the evidence shouldn't be behind jargon. If you want the formatted, citation-linked edition, it's on Amazon. Link in replies.
 
-**7/** Free to read: github.com/leo-bone/HowToInvestBetter · Formatted Kindle/paperback: [AMAZON_LINK_ONCE_LIVE]. RT the first tweet if this belongs in more people's hands.
+**7/** Formatted Kindle/paperback edition: [AMAZON_LINK_ONCE_LIVE]. RT the first tweet if this belongs in more people's hands.
 
 ### C2. Reddit 发帖（r/Bogleheads 或 r/personalfinance · 价值先行，不硬广）
 
-**Title:** I open-sourced a 302-entry, evidence-graded investing guide (CC BY 4.0, free)
+**Title:** A 302-entry, evidence-graded investing guide (free sample inside)
 
 **Body:**
 I got tired of investment advice that can't show its work, so I built a field manual: 302 independent moves, each one stating (1) what it costs, (2) what it returns, and (3) an Evidence Grade A/B/C with the original citation — only peer-reviewed papers and official docs, no gurus.
 
 It covers fees, index investing, behavior, allocation, retirement, real estate, insurance, crypto, and the moves that quietly destroy returns. The "Three-Zero" shortlist (16 free, low-effort, high-grade moves) is the part I'd start with.
 
-The full text is free and open source here: https://github.com/leo-bone/HowToInvestBetter
+The formatted Kindle/paperback edition is on Amazon: [AMAZON_LINK_ONCE_LIVE]
 I also put out a formatted Kindle/paperback version for people who want it portable.
 
 Genuinely curious: which "common sense" investing tip do you think would grade lowest if held to this standard?
@@ -99,7 +99,7 @@ Genuinely curious: which "common sense" investing tip do you think would grade l
 
 Most advice tells you what to do. I wanted to know what it's worth — and how strong the proof is. So I graded 302 moves on cost, payoff, and evidence (A/B/C), citing only journals and official documents.
 
-Free to read: https://github.com/leo-bone/HowToInvestBetter
+Formatted edition on Amazon: [AMAZON_LINK_ONCE_LIVE]
 Formatted edition: [AMAZON_LINK_ONCE_LIVE]
 
 Start with the "Three-Zero" shortlist — 16 moves that cost nothing and need no willpower, yet reliably help.
@@ -115,7 +115,7 @@ Start with the "Three-Zero" shortlist — 16 moves that cost nothing and need no
            —— 没有 review 转化率极低，这是最关键的一步
 [ ] Week 2  纸书可报 Amazon Vine（需 FBA 库存；免费换真实评测；电子书无 Vine）
 [ ] Week 2-4 定价 A/B：ebook 试 $3.99 冲量 vs 维持 $4.99，看销量/排名
-[ ] 持续    GitHub README 加 "Available on Amazon" 徽章 + 链接；en/index.html 加 Amazon 入口
+[ ] 持续    在 en/index.html 与社媒保持 Amazon 入口与购买链接。
 [ ] 闭环    免费全文版权页 / 每章末放 "Prefer a formatted copy? → Amazon" 引流句
 ```
 

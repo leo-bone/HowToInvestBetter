@@ -49,7 +49,7 @@ FONT = "STSong-Light"
 
 TITLE = "高性价比投资指南"
 SUB = "花掉什么，换回什么，证据有多硬"
-AUTHOR = "leo-bone"
+AUTHOR = "leo"
 COPYRIGHT_FILE = os.path.join(ROOT, "版权声明.md")
 
 HEAD_RE = re.compile(r"^#\s+(.+?)\s*$")
@@ -166,7 +166,7 @@ def on_page(canvas, doc):
     canvas.saveState()
     canvas.setFont(FONT, 8)
     canvas.setFillColor(HexColor("#999999"))
-    canvas.drawString(18 * mm, 12 * mm, "高性价比投资指南 · 开源 CC BY 4.0")
+    canvas.drawString(18 * mm, 12 * mm, "高性价比投资指南")
     canvas.drawRightString(doc.pagesize[0] - 18 * mm, 12 * mm, "第 %d 页" % doc.page)
     canvas.restoreState()
 
@@ -195,14 +195,12 @@ def build():
         im = Image(cover_png, width=tw, height=tw * h / w)
         story.append(im)
         story.append(Spacer(1, 8 * mm))
-        story.append(Paragraph("开源 · CC BY 4.0", COVER_F))
         story.append(Paragraph("更新于 %s · 共 %d 章 %d 条" % (today, len(chapters), total_entries), COVER_F))
     else:
         story.append(Paragraph(esc(TITLE), COVER_T))
         story.append(Spacer(1, 6 * mm))
         story.append(Paragraph(esc(SUB), COVER_S))
         story.append(Spacer(1, 10 * mm))
-        story.append(Paragraph("开源 · CC BY 4.0", COVER_F))
         story.append(Paragraph("更新于 %s · 共 %d 章 %d 条" % (today, len(chapters), total_entries), COVER_F))
     story.append(PageBreak())
 

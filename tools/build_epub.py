@@ -28,7 +28,7 @@ BULLET_RE = re.compile(r"^[-*]\s+(.+?)\s*$")
 FIELDS = ["成本", "说人话", "收益", "证据等级", "来源", "备注"]
 
 TITLE = "高性价比投资指南"
-AUTHOR = "leo-bone"
+AUTHOR = "leo"
 UID = "howtoinvestbetter-2026"
 COPYRIGHT_FILE = os.path.join(ROOT, "版权声明.md")
 
@@ -153,7 +153,7 @@ else:
 <body style="text-align:center;padding-top:4em;">
 <h1 style="font-size:2em;color:#c0392b;">%s</h1>
 <p style="font-size:1.1em;">花掉什么，换回什么，证据有多硬</p>
-<p style="color:#777;">开源 · CC BY 4.0</p>
+<p style="color:#777;">循证投资手册</p>
 </body></html>""" % (esc(TITLE), esc(TITLE))
 
 
@@ -275,7 +275,7 @@ def build():
 
     nav_li = "\n".join('<li><a href="%s">%s</a></li>' % (fn, esc(titles.get(fn, fn))) for fn, _ in xhtml_files)
     nav = """<?xml version="1.0" encoding="utf-8"?>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/epub">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
 <head><title>目录</title></head>
 <body>
 <nav epub:type="toc" id="toc">
@@ -297,6 +297,20 @@ def build():
 %s
 </navMap>
 </ncx>""" % (UID, esc(TITLE), "\n".join(ncx_points))
+
+    # --- XML well-formedness gate -------------------------------------------
+    # EPUB/Kindle readers parse every content document as STRICT XML. One bad
+    # document (e.g. an undeclared HTML entity such as &copy;) makes KDP reject
+    # the whole upload with "cannot convert your file". Fail the build here so a
+    # broken EPUB can never be shipped again.
+    import xml.etree.ElementTree as _ET
+    _docs = list(xhtml_files) + [("content.opf", opf), ("nav.xhtml", nav), ("toc.ncx", ncx)]
+    for _name, _text in _docs:
+        try:
+            _ET.fromstring(_text.encode("utf-8"))
+        except Exception as _e:
+            raise SystemExit("\u274c XML invalid in %s: %s" % (_name, _e))
+    print("\u2705 XML gate: %d content documents are well-formed" % len(_docs))
 
     with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED) as z:
         z.writestr("mimetype", "application/epub+zip", compress_type=zipfile.ZIP_STORED)

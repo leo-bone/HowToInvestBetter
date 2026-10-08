@@ -29,7 +29,7 @@ WRAP_PDF = os.path.join(ROOT, "cover-paperback-en.pdf")
 
 TITLE = "A High-Value Investment Guidebook"
 SUB = "What it costs, what it returns, how strong the evidence is"
-AUTHOR = "leo-bone"
+AUTHOR = "leo"
 
 BOLD = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
 REG = "/System/Library/Fonts/Supplemental/Arial.ttf"
@@ -88,7 +88,7 @@ def draw_front(d, ox, oy):
     center(d, "What it costs, what it returns,", cx, oy + 860, fs, BLUE)
     center(d, "how strong the evidence is", cx, oy + 928, fs, BLUE)
     d.line([(cx - 360, oy + 1010), (cx + 360, oy + 1010)], fill=STEEL, width=3)
-    chips = ["302 entries", "24 chapters", "Evidence A/B/C", "CC BY 4.0"]
+    chips = ["302 entries", "24 chapters", "Evidence A/B/C"]
     fch = font(REG, 42)
     gaps = 36
     cw = [tw(d, ch, fch) + 52 for ch in chips]
@@ -104,7 +104,7 @@ def draw_front(d, ox, oy):
     center(d, "Just evidence you can verify yourself.", cx, oy + 1490, fp, LIGHT)
     d.line([(cx - 360, oy + 2160), (cx + 360, oy + 2160)], fill=STEEL, width=3)
     center(d, "by %s" % AUTHOR, cx, oy + 2230, font(REG, 56), (203, 213, 225))
-    center(d, "Open source CC BY 4.0", cx, oy + 2310, font(REG, 36), MUTE)
+    center(d, "Independently authored", cx, oy + 2310, font(REG, 36), MUTE)
 
 
 # ---------------- back cover content (1800x2700 panel) -----------------------
@@ -144,7 +144,7 @@ def draw_back(d, ox, oy):
         "   A/B/C evidence yourself.",
         "Taxes, ETFs, IPOs, and fund screening tuned for",
         "   practical investors.",
-        "Open source CC BY 4.0 - read the full text free online.",
+        "Independently authored - no product recommendations or affiliate links.",
     ]
     yy = oy + 1080
     for b in bullets:
@@ -162,8 +162,6 @@ def draw_back(d, ox, oy):
            font(REG, 28), (130, 130, 130))
     center(d, "ISBN assigned free by KDP", bar_x + bar_w / 2, bar_y - 34,
            font(REG, 30), LIGHT)
-    center(d, "github.com/leo-bone/HowToInvestBetter", bcx,
-           oy + ph - 560, font(REG, 30), MUTE)
 
 
 # ---------------- spine (rotated) --------------------------------------------
@@ -270,7 +268,7 @@ def main():
     center(de, "What it costs, what it returns,", cx, int(860 * sy), fs, BLUE)
     center(de, "how strong the evidence is", cx, int(928 * sy), fs, BLUE)
     de.line([(cx - 320, int(1010 * sy)), (cx + 320, int(1010 * sy))], fill=STEEL, width=3)
-    chips = ["302 entries", "24 chapters", "Evidence A/B/C", "CC BY 4.0"]
+    chips = ["302 entries", "24 chapters", "Evidence A/B/C"]
     fch = font(REG, int(42 * sy))
     gaps = 32
     cw = [tw(de, ch, fch) + 48 for ch in chips]
@@ -286,7 +284,7 @@ def main():
     center(de, "Just evidence you can verify yourself.", cx, int(1490 * sy), fp, LIGHT)
     de.line([(cx - 320, int(2160 * sy)), (cx + 320, int(2160 * sy))], fill=STEEL, width=3)
     center(de, "by %s" % AUTHOR, cx, int(2230 * sy), font(REG, int(54 * sy)), (203, 213, 225))
-    center(de, "Open source CC BY 4.0", cx, int(2310 * sy), font(REG, int(34 * sy)), MUTE)
+    center(de, "Independently authored", cx, int(2310 * sy), font(REG, int(34 * sy)), MUTE)
     eb.save(EBOOK, "PNG", optimize=True)
     print("[ok] %s (1600 x 2560)" % EBOOK)
 
@@ -302,7 +300,7 @@ def main():
     center(ds, "What it costs, what it returns, how strong the evidence is", 600, 350, fs, BLUE)
     fp = font(REG, 30)
     center(ds, "No stock tips. No courses to sell. Just evidence.", 600, 408, fp, LIGHT)
-    chips = ["302 entries", "24 chapters", "Evidence A/B/C", "CC BY 4.0"]
+    chips = ["302 entries", "24 chapters", "Evidence A/B/C"]
     fch = font(REG, 26)
     gaps = 18
     cw = [tw(ds, ch, fch) + 34 for ch in chips]
@@ -313,7 +311,7 @@ def main():
         center(ds, ch, xx + ww / 2, yy + 11, fch, LIGHT)
         xx += ww + gaps
     ff = font(REG, 22)
-    center(ds, "Open-source evidence-based investing manual - cites only journals & official docs",
+    center(ds, "Evidence-based investing manual - cites only journals & official docs",
            600, yy + 86, ff, MUTE)
     sc.save(SOCIAL, "PNG", optimize=True)
     print("[ok] %s (1200 x 630)" % SOCIAL)

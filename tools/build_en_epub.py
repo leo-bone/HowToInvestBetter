@@ -42,7 +42,7 @@ TAG_VAL_MAP = {
 
 TITLE = "A High-Value Investment Guidebook"
 SUB = "What it costs, what it returns, how strong the evidence is"
-AUTHOR = "leo-bone"
+AUTHOR = "leo"
 UID = "howtoinvestbetter-en-2026"
 
 
@@ -187,9 +187,8 @@ def license_xhtml():
 <head><title>License</title></head>
 <body>
 <h1 class="ch">License &amp; Disclaimer</h1>
-<p class="intro">The main content of this guidebook is licensed under <b>CC BY 4.0</b> (Creative Commons Attribution 4.0 International). You are free to share, adapt, and use it commercially, provided you give appropriate credit to the author, <b>%s</b>, and indicate if changes were made. The code (search page, build scripts) is licensed under MIT.</p>
-<p class="intro">This guidebook is an independently authored, evidence-based methodology handbook and is <b>not</b> investment advice from any institution or individual. All citations follow each organization's latest official releases. Markets carry risk; decisions require independent judgment and consultation with a licensed professional.</p>
-<p class="intro">This is an open-source edition. The latest version and the Chinese original are maintained at <b>github.com/leo-bone/HowToInvestBetter</b>.</p>
+<p class="intro">This guidebook is an independently authored, evidence-based methodology handbook. All content is provided for educational and reference purposes only and <b>does not</b> constitute investment advice, an offer, or a solicitation from any institution or individual. All citations follow each organization's latest official releases. Markets carry risk; decisions require independent judgment and consultation with a licensed professional.</p>
+<p class="intro">Copyright &#169; 2026 %s. All rights reserved.</p>
 </body></html>""" % esc(AUTHOR)
 
 
@@ -247,7 +246,7 @@ def build():
 
     nav_li = "\n".join('<li><a href="%s">%s</a></li>' % (fn, esc(titles.get(fn, fn))) for fn, _ in xhtml_files)
     nav = """<?xml version="1.0" encoding="utf-8"?>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.w3.org/2009/opf">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
 <head><title>Contents</title></head>
 <body>
 <nav epub:type="toc" id="toc">
@@ -269,6 +268,20 @@ def build():
 %s
 </navMap>
 </ncx>""" % (UID, esc(TITLE), "\n".join(ncx_points))
+
+    # --- XML well-formedness gate -------------------------------------------
+    # EPUB/Kindle readers parse every content document as STRICT XML. One bad
+    # document (e.g. an undeclared HTML entity such as &copy;) makes KDP reject
+    # the whole upload with "cannot convert your file". Fail the build here so a
+    # broken EPUB can never be shipped again.
+    import xml.etree.ElementTree as _ET
+    _docs = list(xhtml_files) + [("content.opf", opf), ("nav.xhtml", nav), ("toc.ncx", ncx)]
+    for _name, _text in _docs:
+        try:
+            _ET.fromstring(_text.encode("utf-8"))
+        except Exception as _e:
+            raise SystemExit("\u274c XML invalid in %s: %s" % (_name, _e))
+    print("\u2705 XML gate: %d content documents are well-formed" % len(_docs))
 
     with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED) as z:
         z.writestr("mimetype", "application/epub+zip", compress_type=zipfile.ZIP_STORED)

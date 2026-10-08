@@ -20,7 +20,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PRINT_PDF = os.path.join(ROOT, "HowToInvestBetter-print.pdf")
 OUT_PNG = os.path.join(ROOT, "cover-paperback.png")
 OUT_PDF = os.path.join(ROOT, "cover-paperback.pdf")
-AUTHOR = "leo-bone"
+AUTHOR = "leo"
 TITLE = "高性价比投资指南"
 
 HEITI = "/System/Library/Fonts/STHeiti Medium.ttc"
@@ -116,7 +116,7 @@ def main():
     center(d, "循证投资手册", cx, Y(720), font(SONG, int(64 * ry)), (203, 213, 225))
     center(d, "花掉什么 · 换回什么 · 证据有多硬", cx, Y(830), font(SONG, int(50 * ry)), BLUE)
     d.line([(cx - 360 * rx, Y(960)), (cx + 360 * rx, Y(960))], fill=STEEL, width=int(3 * ry))
-    chips = ["302 条", "24 章", "证据 A/B/C", "CC BY 4.0"]
+    chips = ["302 条", "24 章", "证据 A/B/C"]
     fch = font(SONG, int(44 * ry))
     gaps = 40 * rx
     cw = [text_w(d, ch, fch) + 56 * rx for ch in chips]
@@ -134,7 +134,7 @@ def main():
     ff = font(SONG, int(44 * ry))
     d.line([(cx - 360 * rx, Y(2200)), (cx + 360 * rx, Y(2200))], fill=STEEL, width=int(3 * ry))
     center(d, "作者  %s" % AUTHOR, cx, Y(2270), ff, (203, 213, 225))
-    center(d, "开源 CC BY 4.0 · 只引期刊论文与官方文件", cx, Y(2340), font(SONG, int(36 * ry)), MUTE)
+    center(d, "只引期刊论文与官方文件", cx, Y(2340), font(SONG, int(36 * ry)), MUTE)
 
     # ================= 书脊（中间） =================
     d.rectangle([spine_x0, trim_top, spine_x0 + spine, trim_top + trim_h], fill=(12, 22, 38))
@@ -174,7 +174,7 @@ def main():
         "首创「三零原则」：花费、时间、毅力成本全为零的动作闭眼先做",
         "每条给原始出处，A/B/C 三级证据自己能核查",
         "适配中国市场的税费、ETF、打新、基金筛选",
-        "开源 CC BY 4.0，可免费在线全文阅读",
+        "独立撰写，不含任何产品推荐与返佣",
     ]
     fbul = font(SONG, int(38 * ry))
     yy = Y(760)
@@ -193,8 +193,6 @@ def main():
     d.text((bar_x, bar_y - int(70 * ry)), "ISBN：由 KDP 免费分配", font=font(SONG, int(32 * ry)), fill=LIGHT)
     # 署名与仓库（置于条码区上方，避免被条码覆盖或压框）
     center(d, "作者 %s" % AUTHOR, bcx, trim_top + trim_h - int(640 * ry), font(SONG, int(36 * ry)), (203, 213, 225))
-    center(d, "github.com/leo-bone/HowToInvestBetter", bcx,
-           trim_top + trim_h - int(578 * ry), font(SONG, int(31 * ry)), MUTE)
 
     img.save(OUT_PNG, "PNG", optimize=True)
 

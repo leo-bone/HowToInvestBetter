@@ -6,9 +6,9 @@
 
 - **书名**：高性价比投资指南
 - **副标题**：花掉什么，换回什么，证据有多硬（循证投资手册）
-- **作者**：leo-bone
+- **作者**：leo
 - **语言**：简体中文（zh-CN）
-- **出版商**：leo-bone（自出版）
+- **出版商**：leo（自出版）
 - **书籍类型**：非虚构 · 商业与理财
 
 ## 书籍简介（KDP 描述，约 180 字）
@@ -53,4 +53,4 @@
 2. 新建「**Kindle 电子书**」：填上方书名／作者／描述／关键词／分类，上传 `HowToInvestBetter.epub` + `cover-book.png`，预览无误后发布（约 48 小时上线 Amazon.com）。
 3. 可选新建「**平装书（Paperback）**」：上传 `HowToInvestBetter-print.pdf`（内文）+ `cover-paperback.pdf`（完整书封），纸张选**白纸**，填 ISBN（可向 KDP 免费申请），发布。注意：若更换内文页数或纸张，必须重跑 `tools/gen_cover_paperback.py` 重算书脊。
 4. 定价 $3.99，确认处于 70% 版税区间。
-5. 上线后用 GitHub Pages（leo-bone.github.io/HowToInvestBetter）+ 6 语言 README 导流。
+5. 上线后通过自有渠道（邮件列表 / 社媒）告知读者并收集评价。

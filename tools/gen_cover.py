@@ -52,7 +52,7 @@ def main():
     d.text((82, 340), "花掉什么 · 换回什么 · 证据有多硬", font=f_tag, fill=(147, 197, 253))
 
     # 数据 chips
-    chips = ["302 条", "24 章", "证据 A/B/C", "CC BY 4.0"]
+    chips = ["302 条", "24 章", "证据 A/B/C"]
     x = 82
     y = 470
     f_chip = font(SONG, 26)
@@ -65,7 +65,7 @@ def main():
 
     # 页脚
     f_foot = font(SONG, 22)
-    d.text((82, y + 78), "开源循证投资手册 · 只引期刊论文与官方文件",
+    d.text((82, y + 78), "循证投资手册 · 只引期刊论文与官方文件",
            font=f_foot, fill=(100, 116, 139))
 
     img.save(OUT, "PNG", optimize=True)
