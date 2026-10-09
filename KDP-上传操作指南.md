@@ -2,7 +2,7 @@
 
 > 配合 `KDP-中文版填报表.md`（字段数值）与 `AMAZON-上架方案.md`（战略与竞品）使用。
 > 本指南按 KDP 后台真实流程逐屏拆解，所有"填什么"都来自填报表，可直接复制。
-> 目标：把《高性价比投资指南》上架到 Amazon.com（国际站）卖 Kindle 电子书 + 平装纸书。
+> 目标：把《高性价比投资指南》上架到 Amazon.com（国际站）卖 **Kindle 电子书**（⚠️ 中文纸书 KDP 不支持，见 §3）。
 >
 > **英文版优先**：英文版（*A High-Value Investment Guidebook*）字段与上传资产见 [`KDP-英文版填报表.md`](KDP-英文版填报表.md)。
 > 建议**先上英文版**（受众最大、定价空间更大），再上中文版；下方 §1 的账户／W-8BEN 税务／收款三步**两版通用**。
@@ -16,7 +16,7 @@
 | 1 | 国际 KDP 账户 | 在 kdp.amazon.com 注册（中国 Kindle 商店已关，只能上国际站卖给海外读者） | ❌ 需你的邮箱 + 身份验证 |
 | 2 | 收款方式 | 中国银行卡 Amazon 不能直接打款，用 **Payoneer / WorldFirst** 开一个"美国虚拟银行账户"作为收款账户 | ❌ 需你的身份 + 开户 |
 | 3 | 税务表 W-8BEN | 非美国作者必须填，否则版税被预扣 30%；填了按中美协定降到 ~0–10% | ❌ 需你的税务信息 |
-| 4 | 上传文件 | `HowToInvestBetter.epub` + `cover-book.png`（电子书）；`HowToInvestBetter-print.pdf` + `cover-paperback.pdf`（纸书） | ✅ 已生成在仓库 |
+| 4 | 上传文件 | `HowToInvestBetter.epub` + `cover-book.jpg`（中文电子书，传 KDP）；`HowToInvestBetter-print.pdf` + `cover-paperback.pdf`（中文纸书，**IngramSpark 用**，KDP 用不了） | ✅ 已生成在仓库 |
 
 > ⚠️ 1–3 是平台账户操作，带你的身份与资金，**必须你自己完成**。我只能把第 4 项的文件和上架字段备好。
 
@@ -47,7 +47,7 @@
 
 | 字段 | 填什么（直接复制） |
 |---|---|
-| **Language（语言）** | Chinese (Simplified) |
+| **Language（语言）** | **Chinese (Traditional)** ← 中文在 KDP 语言表里只有这一项（仅电子书）。若下拉另有 Chinese (Simplified)，选它更贴合内容，但**两者都不解锁纸书** |
 | **Book title（书名）** | 高性价比投资指南 |
 | **Subtitle（副标题）** | 花掉什么，换回什么，证据有多硬（循证投资手册） |
 | **Author（作者）** | leo |
@@ -75,7 +75,7 @@
 
 ### 2.3 Kindle eBook Content（上传正文与封面）
 
-1. **Manuscript（正文）**：上传 `HowToInvestBetter.epub`。
+1. **Manuscript（正文）**：上传 `HowToInvestBetter.epub`。（⚠️ 官方对「Chinese (Traditional)」电子书只列 **DOC/DOCX**，EPUB 有被审核打回的风险；**若被打回，告诉我，我立刻生成 DOCX 版本**。）
    - 上传后点 **「Preview book（预览）」** 用在线阅读器翻一遍，重点看：封面→版权页→导读→第 1 章导航是否正常、中文是否乱码。
    - 若乱码：EPUB 已内嵌思源宋体回退，正常不会；万一出问题，先用 **Kindle Previewer**（Amazon 免费工具）本地校验一次再传。
 2. **Book cover（封面）**：选 **「Upload a cover image」** → 上传 `cover-book.png`（1600×2560 竖版）。
@@ -101,39 +101,27 @@
 
 ---
 
-## 3. 新建平装纸书（Paperback）
+## 3. 中文纸书：KDP 建不了，改走 IngramSpark
 
-电子书上线后（或同时），后台 **「+ Create」→「Paperback」**。
+> ⚠️ **这不是设置错误，是平台硬限制。**
+> KDP 官方《Book Supported Languages》表中中文只有「**Chinese (Traditional)（eBook only，仅电子书）**」一项；官方《Chinese (Traditional) (Beta)》帮助页明确写「KDP doesn't support: **Paperbacks in Chinese (Traditional or Simplified)**」。
+> 所以后台点「Paperback」只会出现一行灰字 `KDP does not support creating paperbacks in Chinese (Traditional)`，**上传槽根本不会出现**。换语言、转繁体都无效。
 
-### 3.1 Paperback Details
-
-- 书名 / 副标题 / 作者 / 描述 / 关键词 / 分类：**与电子书完全一致**（复制 2.1–2.2）。
-- Publishing rights：同样勾「I own the copyright…」。
-
-### 3.2 Paperback Content
-
-| 字段 | 填什么 |
+| 想知道 | 答案 |
 |---|---|
-| **Manuscript（内文 PDF）** | 上传 `HowToInvestBetter-print.pdf`（6×9，337 页，已含页码/版权页，字体已内嵌） |
-| **Paperback cover（书封）** | 选「Upload a cover」→ 上传 `cover-paperback.pdf`（**首选 PDF 格式**；PNG 也接受） |
-| **Paper type（纸张）** | **White（白纸）** ← 必须选白纸，与我们书脊 0.7589″ 的计算一致；改米色纸须重算书脊 |
-| **Ink（印刷）** | Black & White（黑白，最便宜） |
-| **Trim size（裁切）** | **6" x 9" (15.24 x 22.86 cm)** ← 与 PDF 一致 |
-| **Bleed（出血）** | **Bleed**（书封四周有 0.125″ 出血，必须选 Bleed 否则裁切错位） |
-| **ISBN** | 选「**Get a free ISBN from Amazon（向 KDP 免费申请）**」，省去自购 ISBN |
+| 中文 Kindle 电子书 | ✅ 可以（照 §2 走） |
+| 中文平装 / 精装纸书 | ❌ KDP 一律不支持 |
+| 那中文纸书去哪做 | **IngramSpark**（POD，支持简体中文实体书） |
 
-> ⚠️ 纸张选白纸、裁切选 6×9、出血选 Bleed——这三项必须和做书封时的参数对上，否则印刷出来封面套不准。
+### 3.1 IngramSpark 关键参数
 
-### 3.3 Paperback Pricing
+- **渠道**：全球 4 万+ 书店 / 图书馆 / 学校 / 线上零售商（Ingram 分销网络），也可经其进入 Amazon 销售。
+- **费用**：每本书号约 **$49** 上架费（常有促销码免掉）；无库存、先卖后印。
+- **ISBN**：建议**自购全球通用 ISBN**（用平台免费 ISBN 会把出版商登记成平台）。
+- **分销设置**：批发折扣 **55%** + 退货政策「可退货」，否则书店不进货。
+- **文件**：现有 `HowToInvestBetter-print.pdf`（6×9 / 337 页 / 字体全内嵌）可直接作为内文候选，但**页边距与出血需按其模板复核**；封面必须用其 **cover template 生成器**按 337 页重算（其书脊公式与 KDP 略有差异），不能直接上传 `cover-paperback.pdf`。
+- **决策**：中文纸书非刚需 → 中文只出电子书，纸书精力放在**英文版**（English 在 KDP 上 paperback / hardcover 全支持）。
 
-- 纸书定价：337 页白纸黑白，美站印刷成本 **$5.04**（= $1.00 + 337×$0.012）；定价 ≥ $9.99 才走 60% 档，建议 **$12.99–$16.99**。
-- 建议定价 **$14.99**，并开启 **「Matchbook / 低价匹配」**（可选）让电子书促销时纸书自动跟价。
-- 纸书版税：选 **60%**（KDP 纸书固定 60% 减去印刷成本，到手约 $4–$6/本）。
-
-### 3.4 发布
-
-- 点 **「Publish your paperback」** → 同样 24–72 小时变 Live。
-- 纸书会先出**「出版社样书（Author Copy）**"，建议花 $10 左右买一本实体样书翻看印刷质量，确认无误再大规模推广。
 
 ---
 
@@ -155,8 +143,8 @@
 [ ] 2. 填 W-8BEN 税务表
 [ ] 3. 新建 Kindle eBook，照抄 §2 字段，传 .epub + cover-book.png
 [ ] 4. 预览无误 → 定价 $3.99 / 70% → Publish（24–72h 上线）
-[ ] 5. 新建 Paperback，照抄 §3 字段，传 print.pdf + cover-paperback.pdf
-[ ] 6. 纸张=白纸 / 裁切=6×9 / 出血=Bleed / 免费 ISBN → Publish
+[ ] 5. （中文纸书在 KDP 建不了 —— 见 §3；如需纸书改走 IngramSpark）
+[ ] 6. 留意 KDP 是否因格式退回中文电子书 EPUB → 若退回改传 DOCX
 [ ] 7. 买一本 Author Copy 实体样书核对印刷
 [ ] 8. 在自有渠道 / 书描述互链导流
 ```
@@ -174,6 +162,8 @@
 | 纸书纸张选了米色 | 书脊 0.7589″ 失效、封面套不准 | 选白纸；要换米色先重算书脊 |
 | 纸书出血选 None | 封面四周被裁掉 | 选 Bleed |
 | EPUB 中文乱码 | 审核退回 / 读者差评 | 上传前用 Kindle Previewer 校验 |
+| **中文电子书传 EPUB 被打回（要求 DOC/DOCX）** | 审核不过，需重传 | KDP 官方对 Chinese (Traditional) 电子书只列 DOC/DOCX；被打回就改传 Word 版 |
+| **后台点 Paperback 只有一行灰字「KDP does not support creating paperbacks in Chinese (Traditional)」** | 中文纸书**根本建不了**，与环境/设置无关 | KDP 官方不支持任何中文纸书（繁简皆不支持）。改走 IngramSpark，见 §3 |
 | **纸书报「Fonts are missing…」** | 印前检查直接拒收，无法发布 | 内文 PDF 的字体必须**全部内嵌**。构建脚本已改用 Songti SC（TrueType，子集内嵌）；旧版 STSong-Light 是 Adobe CID 字体、只引用不嵌入，必被拒。重跑 `python3 tools/build_pdf.py --print` 即可 |
 | 定价低于 $2.99 | 只能选 35% 版税 | 维持 $2.99–$9.99 拿 70% |
 | 勾了 KDP Select | 90 天 Kindle 独家限制 | 按需评估 |
@@ -192,4 +182,4 @@ python3 tools/gen_cover_paperback.py # 按新页数重算书脊，重出 cover-p
 python3 tools/build_epub.py          # 电子书
 ```
 
-重算后把新的 `HowToInvestBetter-print.pdf` + `cover-paperback.pdf` 重新上传到 KDP（后台「…」→「Edit paperback content」→ 替换文件即可，不用重建书记录）。
+重算后：**英文纸书**把新的 PDF 重传到 KDP（后台「…」→「Edit paperback content」→ 替换文件，不用重建书记录）；**中文纸书**则传到 IngramSpark（KDP 用不上中文纸书）。

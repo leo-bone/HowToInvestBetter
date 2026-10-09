@@ -153,7 +153,7 @@
 ## 8. 与中文版的关系（上架顺序建议）
 
 - **英文版是打开 Amazon.com 最大市场的主力**，建议**先上英文版**（受众大、定价空间更大、无中文乱码风险）。
-- 中文版随后走同一账户上架（Language=Chinese (Simplified)），字段见 [`KDP-中文版填报表.md`](KDP-中文版填报表.md)。
+- 中文版随后走同一账户上架（KDP 语言只能选 **Chinese (Traditional)**，中文无 Simplified 支持项；且**中文纸书 KDP 不支持**，纸书须走 IngramSpark），字段见 [`KDP-中文版填报表.md`](KDP-中文版填报表.md)。
 - 两版共用同一作者名（leo）；不要勾 KDP Select，保持多渠道销售。
 
 ---
